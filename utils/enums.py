@@ -3,6 +3,7 @@ class JsonReader:
     FileNotFound = -1
     DecodeError = -2
     KeyModified = -3
+    MaxPrefError = -4
 
 
 class GeneralErrors:

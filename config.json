@@ -1,4 +1,5 @@
 {
     "Token": "#",
+    "MaxPrefixLen": 3,
     "Prefix": "?"
 }

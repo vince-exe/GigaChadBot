@@ -1,10 +1,4 @@
-from errors.errors import *
-
-from utils.utils import read_json, data
-from utils.enums import GeneralErrors, DiscordErrors
-
 from commands.commands import *
-
 
 import discord
 
@@ -15,7 +9,7 @@ if __name__ == '__main__':
 
     #  start the run method to connect with the Discord server
     try:
-        client.run(data['Token'])
+        bot.run(data['Token'])
 
     except KeyboardInterrupt:
         exit(GeneralErrors.KeyBoardInterrupt_)

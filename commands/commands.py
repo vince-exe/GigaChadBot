@@ -1,14 +1,33 @@
-from utils.enums import Colors
-
-from utils.utils import data
-
 import discord
 
+from utils.enums import *
 
-#  create a client object that we are going to use to connect with Discord APIs
-client = discord.Client()
+from utils.utils import *
+
+from discord.ext import commands
+
+#  create a bot object that we are going to use to connect with Discord APIs
+bot = commands.Bot(command_prefix=data['Prefix'])
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f"{Colors.Green}--> {Colors.Reset}Successfully logged in as {client.user}")
+    print(f"{Colors.Green}--> {Colors.Reset}Successfully logged in as {bot.user}")
+
+
+@bot.event
+async def on_message(message):
+    await bot.process_commands(message)
+
+
+# say hello
+@bot.command()
+async def hello(ctx):
+    author = str(ctx.author)
+    await ctx.send(f'Ciao {author[0:len(author) - 5]}')
+
+
+# repeat a message
+@bot.command()
+async def repeat(ctx, message):
+    await ctx.send(message)
