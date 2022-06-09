@@ -7,6 +7,12 @@ class JsonReader:
 
 class GeneralErrors:
     ReadingSettingsError = -5
+    KeyBoardInterrupt_ = -1
+    ValueError_ = -2
+
+
+class DiscordErrors:
+    InvalidToken = -1
 
 
 class Colors:
