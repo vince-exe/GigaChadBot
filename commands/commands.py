@@ -1,5 +1,7 @@
 import discord
 
+from discord.ext.commands import has_guild_permissions
+
 from utils.enums import *
 
 from utils.utils import *
@@ -40,8 +42,23 @@ async def repeat(ctx, message=None):
         await ctx.send(ctx.message.content[len('?repeat'):])
 
 
-# handle the error CommandNotFound
+# kick a user if he as at least the KickMembers permission
+@bot.command()
+@has_guild_permissions(kick_members=True)
+async def kick(ctx, member: discord.Member, *, reason=None):
+    if reason is None:
+        await ctx.send(f'Impossibile espellere {member.mention}, devi specificare il motivo del kick!!')
+
+    else:
+        await ctx.guild.kick(member)
+        await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
+
+
+# handle the errors CommandNotFound, MissingPermission
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send('Non ho trovato il comando nel mio chad archivio')
+
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send('Non hai i permessi necessari')

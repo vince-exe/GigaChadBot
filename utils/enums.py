@@ -10,6 +10,7 @@ class GeneralErrors:
     ReadingSettingsError = -5
     KeyBoardInterrupt_ = -1
     ValueError_ = -2
+    ConnectionError_ = -3
 
 
 class DiscordErrors:
