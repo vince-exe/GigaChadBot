@@ -26,14 +26,14 @@ async def on_message(ctx):
         await ctx.send(f'Il comando non è presente nel chad archivio')
 
 
-# say hello
+# Say Hello
 @bot.command(aliases=['ciao'])
 async def hello(ctx):
     author = str(ctx.author)
     await ctx.send(f'Ciao {author[0:len(author) - 5]}')
 
 
-# repeat a message
+# Repeat a Message
 @bot.command(aliases=['ripeti'])
 async def repeat(ctx, message=None):
     if message is None:
@@ -54,11 +54,29 @@ async def kick(ctx, member: discord.Member, *, reason=None):
         await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
 
 
+# Clear the chat, the user pass the amount of messages that he wants do delete
+@bot.command()
+@has_guild_permissions(manage_channels=True)
+async def clear_(ctx, limit_=None):
+    if limit_ is None:
+        await ctx.send(f'Parametri insufficienti, digita {data["Prefix"]}help per maggiori informazioni')
+
+    else:
+        await ctx.channel.purge(limit=int(limit_))
+
+
+# Clear the All the chat
+@bot.command()
+@has_guild_permissions(manage_channels=True)
+async def clear(ctx):
+    await ctx.channel.purge()
+
+
 # handle the errors CommandNotFound, MissingPermission
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send('Non ho trovato il comando nel mio chad archivio')
+        pass
 
     elif isinstance(error, commands.MissingPermissions):
-        await ctx.send('Non hai i permessi necessari')
+        await ctx.send('Non hai i permessi necessari per eseguire questo comando')

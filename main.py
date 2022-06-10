@@ -1,10 +1,8 @@
 import aiohttp.client_exceptions
-from discord import Permissions
-
-from commands.commands import *
-
 
 import discord
+
+from commands.commands import *
 
 
 if __name__ == '__main__':
