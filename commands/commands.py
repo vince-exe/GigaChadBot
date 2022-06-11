@@ -1,12 +1,13 @@
-import discord
-
 from discord.ext.commands import has_guild_permissions
 
-from utils.enums import *
+from utils.enums import Colors
 
-from utils.utils import *
+from utils.utils import data
 
 from discord.ext import commands
+
+import discord
+
 
 #  create a bot object that we are going to use to connect with Discord APIs
 bot = commands.Bot(command_prefix=data['Prefix'])
@@ -14,7 +15,7 @@ bot = commands.Bot(command_prefix=data['Prefix'])
 
 @bot.event
 async def on_ready():
-    print(f"{Colors.Green}--> {Colors.Reset}Successfully logged in as {bot.user}")
+    print(f"\n{Colors.Green}--> {Colors.Reset}Successfully logged in as {bot.user}")
 
 
 @bot.event
@@ -42,7 +43,7 @@ async def repeat(ctx, message=None):
         await ctx.send(ctx.message.content[len('?repeat'):])
 
 
-# kick a user if he as at least the KickMembers permission
+# kick a user
 @bot.command()
 @has_guild_permissions(kick_members=True)
 async def kick(ctx, member: discord.Member, *, reason=None):
@@ -50,11 +51,23 @@ async def kick(ctx, member: discord.Member, *, reason=None):
         await ctx.send(f'Impossibile espellere {member.mention}, devi specificare il motivo del kick!!')
 
     else:
-        await ctx.guild.kick(member)
+        await ctx.guild.kick(member, reason=reason)
         await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
 
 
-# Clear the chat, the user pass the amount of messages that he wants do delete
+# ban a user
+@bot.command()
+@has_guild_permissions(ban_members=True)
+async def ban(ctx, member: discord.Member, *, reason=None):
+    if reason is None:
+        await ctx.send(f"Impossibile bannare {member.mention}, devi specificare il motivo del ban!!")
+
+    else:
+        await member.send(f'Sei stato bannato dal server per il seguente motivo: {reason}')
+        await ctx.guild.ban(member, reason=reason)
+        await ctx.channel.send(f"L'utente è stato bannato dal server da {ctx.author}")
+
+# Clear the chat, the user pass the amount of messages that he wants to delete
 @bot.command()
 @has_guild_permissions(manage_channels=True)
 async def clear_(ctx, limit_=None):

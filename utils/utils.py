@@ -18,7 +18,7 @@ def read_json():
         with open(JsonReader.FileName, 'r') as file:
             data_ = json.load(file)
 
-        # check if the the len of the prefix isn't greater than the prefix len
+        # check if the len of the prefix isn't greater than the prefix len
         if len(str(data_['Prefix'])) > data_['MaxPrefixLen']:
             return JsonReader.MaxPrefError
 

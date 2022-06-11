@@ -1,4 +1,4 @@
-from utils.enums import *
+from utils.enums import JsonReader, Colors, GeneralErrors
 
 
 def read_json_errors(error):
