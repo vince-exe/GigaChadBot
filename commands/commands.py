@@ -28,14 +28,14 @@ async def on_message(ctx):
 
 
 # Say Hello
-@bot.command(aliases=['ciao'])
+@bot.command()
 async def hello(ctx):
     author = str(ctx.author)
     await ctx.send(f'Ciao {author[0:len(author) - 5]}')
 
 
 # Repeat a Message
-@bot.command(aliases=['ripeti'])
+@bot.command()
 async def repeat(ctx, message=None):
     if message is None:
         await ctx.send('Cosa devo ripetere bro??')
@@ -67,6 +67,7 @@ async def ban(ctx, member: discord.Member, *, reason=None):
         await ctx.guild.ban(member, reason=reason)
         await ctx.channel.send(f"L'utente è stato bannato dal server da {ctx.author}")
 
+
 # Clear the chat, the user pass the amount of messages that he wants to delete
 @bot.command()
 @has_guild_permissions(manage_channels=True)
@@ -83,6 +84,25 @@ async def clear_(ctx, limit_=None):
 @has_guild_permissions(manage_channels=True)
 async def clear(ctx):
     await ctx.channel.purge()
+
+
+@bot.command()
+async def whois(ctx, member: discord.Member):
+    embed = discord.Embed(title="Informazioni Utente",
+                          color=discord.Color.dark_blue())
+
+    fields = [("Nome", str(member), True),
+              ("ID", member.id, True),
+              ("Top Ruolo", f'@{member.top_role}', False),
+              ("Data Creazione", member.created_at.strftime("%d/%m/%Y %H:%M:%S"), True),
+              ("Entrato Nel Server", member.joined_at.strftime("%d/%m/%Y %H:%M:%S"), True),
+              ]
+
+    for name, value, inline in fields:
+        embed.add_field(name=name, value=value, inline=inline)
+
+    embed.set_thumbnail(url=member.avatar_url)
+    await ctx.send(embed=embed)
 
 
 # handle the errors CommandNotFound, MissingPermission
