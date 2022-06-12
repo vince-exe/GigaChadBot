@@ -1,16 +1,11 @@
+import os
+
 from utils.enums import JsonReader, GeneralErrors
 
 from errors.errors import read_json_errors
 
 
 import json
-
-
-def is_mod(user, white_list):
-    if user in white_list:
-        return True
-
-    return False
 
 
 def read_json():
@@ -36,6 +31,12 @@ def read_json():
 
     except ValueError:
         return GeneralErrors.ValueError_
+
+
+def load_ext(dir_name, bot):
+    for filename in os.listdir(f'./{dir_name}'):
+        if filename.endswith('.py'):
+            bot.load_extension(f'{dir_name.replace("/", ".")}.{filename[:-3]}')
 
 
 data = read_json_errors(read_json())
