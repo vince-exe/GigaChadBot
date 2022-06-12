@@ -1,8 +1,10 @@
 from discord.ext import commands
 
-from utils.utils import data, load_ext
+from utils.utils import load_ext
 
-from utils.enums import GeneralErrors, Colors, DiscordErrors
+from utils.utils import GeneralErrors, Colors, DiscordErrors
+
+from config.config import data
 
 from aiohttp.client_exceptions import ClientConnectorError
 

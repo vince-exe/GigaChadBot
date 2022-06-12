@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from utils.enums import Colors
+from utils.utils import Colors
 
 
 class Iterations(commands.Cog):

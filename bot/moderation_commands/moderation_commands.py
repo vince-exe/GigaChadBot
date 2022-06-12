@@ -1,7 +1,10 @@
 from discord.ext import commands
+
 from discord.ext.commands import has_guild_permissions
 
-from utils.enums import Colors
+from utils.utils import Colors
+
+from config.config import data
 
 import discord
 
@@ -17,23 +20,39 @@ class Moderation(commands.Cog):
     @commands.command()
     @has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        if reason is None:
-            await ctx.send(f'Impossibile espellere {member.mention}, devi specificare il motivo del kick!!')
+        try:
+            if reason is None:
+                await ctx.send(f'Impossibile espellere {member.mention}, devi specificare il motivo del kick!!')
 
-        else:
-            await ctx.guild.kick(member, reason=reason)
-            await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
+            else:
+                await ctx.guild.kick(member, reason=reason)
+                await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
+
+        except discord.HTTPException:
+            embed = discord.Embed(title=f'Impossibile eseguire il comando {data["Prefix"]}kick',
+                                  color=discord.Color.dark_purple())
+
+            await ctx.channel.send(embed=embed)
 
     @commands.command()
     @has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        if reason is None:
-            await ctx.send(f"Impossibile bannare {member.mention}, devi specificare il motivo del ban!!")
+        try:
+            if reason is None:
+                await ctx.send(f"Impossibile bannare {member.mention}, devi specificare il motivo del ban!!")
 
-        else:
-            await member.send(f'Sei stato bannato dal server per il seguente motivo: {reason}')
-            await ctx.guild.ban(member, reason=reason)
-            await ctx.channel.send(f"L'utente è stato bannato dal server da {ctx.author}")
+            else:
+                if not member.bot:
+                    await member.send(f'Sei stato bannato dal server per il seguente motivo: {reason}')
+
+                await ctx.guild.ban(member, reason=reason)
+                await ctx.channel.send(f"L'utente è stato bannato dal server da {ctx.author}")
+
+        except discord.HTTPException:
+            embed = discord.Embed(title=f'Impossibile eseguire il comando {data["Prefix"]}ban',
+                                  color=discord.Color.dark_purple())
+
+            await ctx.channel.send(embed=embed)
 
 
 def setup(bot):

@@ -2,9 +2,9 @@ from discord.ext import commands
 
 from discord.ext.commands import has_guild_permissions
 
-from utils.enums import Colors
+from utils.utils import Colors
 
-from utils.utils import data
+from config.config import data
 
 import discord
 
