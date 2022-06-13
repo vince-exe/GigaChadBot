@@ -17,6 +17,27 @@ class Moderation(commands.Cog):
     async def on_ready(self):
         print(f'\n{Colors.Green}--> {Colors.Reset}Moderation commands ready')
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        message.content = str(message.content)
+
+        msg = message.content.lower()
+        msg = msg.split()
+
+        if any(item in msg for item in data['BlackWords']):
+            await message.delete()
+
+            embed = discord.Embed(title='Black Word',
+                                  description=f"Il bot ha segnalato allo staff l'utilizzo di una black word"
+                                              f" da parte tua, digita {data['Prefix']}blackwords per avere"
+                                              f" la lista delle black words del server",
+                                  color=discord.Color.dark_purple())
+
+            embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
+            embed.add_field(name='Autore Messaggio', value=str(message.author), inline=False)
+
+            await message.author.send(embed=embed)
+
     @commands.command()
     @has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):

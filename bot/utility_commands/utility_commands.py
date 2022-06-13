@@ -37,9 +37,13 @@ class Utilities(commands.Cog):
         embed = discord.Embed(title="Informazioni Utente",
                               color=discord.Color.dark_purple())
 
+        role = str(member.top_role)
+        if not role.startswith('@'):
+            role = '@' + role
+
         fields = [("Nome", str(member), True),
                   ("ID", member.id, True),
-                  ("Top Ruolo", f'@{member.top_role}', False),
+                  ("Top Ruolo", role, False),
                   ("Data Creazione", member.created_at.strftime("%d/%m/%Y %H:%M:%S"), True),
                   ("Entrato Nel Server", member.joined_at.strftime("%d/%m/%Y %H:%M:%S"), True),
                   ]

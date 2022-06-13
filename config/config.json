@@ -1,5 +1,11 @@
 {
-    "Token": "#",
+    "Token": "OTg0NTQ2MDY0Njc5OTcyODY0.G2S-T4.Mir-q88ENvXvcdgHW0Ra7HRliQjgcxYK2FyMCw",
     "MaxPrefixLen": 3,
-    "Prefix": "?"
+    "Prefix": "?",
+    "BlackWords": [
+        "nigga",
+        "negro",
+        "frocio",
+        "ricchione"
+    ]
 }
