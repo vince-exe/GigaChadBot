@@ -6,12 +6,15 @@ from utils.utils import Colors
 
 from config.config import data
 
+from utils.utils import get_date
+
 import discord
 
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.log_channel_id = int(data['LogChannel'])
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -28,7 +31,7 @@ class Moderation(commands.Cog):
             await message.delete()
 
             embed = discord.Embed(title='Black Word',
-                                  description=f"Il bot ha segnalato allo staff l'utilizzo di una black word"
+                                  description=f"I l bot ha segnalato allo staff l'utilizzo di una black word"
                                               f" da parte tua, digita {data['Prefix']}blackwords per avere"
                                               f" la lista delle black words del server",
                                   color=discord.Color.dark_purple())
@@ -42,38 +45,101 @@ class Moderation(commands.Cog):
     @has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         try:
-            if reason is None:
-                await ctx.send(f'Impossibile espellere {member.mention}, devi specificare il motivo del kick!!')
+            if reason is not None:
+                if not member.bot:
+                    embed = discord.Embed(title='Messaggio dal Server',
+                                          description='sei stato espulso dal server',
+                                          color=discord.Color.dark_purple(),
+                                          )
 
-            else:
+                    embed.add_field(name='Staffer', value=ctx.author, inline=False)
+                    embed.add_field(name='Motivazione', value=reason, inline=False)
+                    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+                    embed.add_field(name='Info sul Kick', value=data['InfoBanKick'], inline=False)
+                    await member.send(embed=embed)
+
+                embed = discord.Embed(title='Utente Espulso',
+                                      description='Un utente è stato espulso dal server',
+                                      color=discord.Color.dark_purple())
+
+                embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+                embed.add_field(name='Utente Espulso', value=str(member.mention), inline=False)
+                embed.add_field(name='Motivazione', value=reason, inline=False)
+                embed.add_field(name='Data Comando', value=get_date(), inline=False)
+                channel = ctx.guild.get_channel(self.log_channel_id)
+
                 await ctx.guild.kick(member, reason=reason)
-                await ctx.send(f"L'utente {member.mention} è stato espulso dal server per il seguente motivo: {reason}")
+
+                if channel is None:
+                    print(f"\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto"
+                          f" nel file di configurazione")
+                    return
+
+                await channel.send(embed=embed)
 
         except discord.HTTPException:
-            embed = discord.Embed(title=f'Impossibile eseguire il comando {data["Prefix"]}kick',
+            channel = ctx.guild.get_channel(self.log_channel_id)
+
+            embed = discord.Embed(title='Errore di Comando',
+                                  description=f'Impossibile eseguire il comando {data["Prefix"]}kick',
                                   color=discord.Color.dark_purple())
 
-            await ctx.channel.send(embed=embed)
+            embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+            embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+            await ctx.guild.kick(member)
+            await channel.send(embed=embed)
 
     @commands.command()
     @has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         try:
-            if reason is None:
-                await ctx.send(f"Impossibile bannare {member.mention}, devi specificare il motivo del ban!!")
-
-            else:
+            if reason is not None:
                 if not member.bot:
-                    await member.send(f'Sei stato bannato dal server per il seguente motivo: {reason}')
+                    embed = discord.Embed(title='Messaggio dal Server',
+                                          description='sei stato bannato dal server',
+                                          color=discord.Color.dark_purple(),
+                                          )
+
+                    embed.add_field(name='Staffer', value=ctx.author, inline=False)
+                    embed.add_field(name='Motivazione', value=reason, inline=False)
+                    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+                    embed.add_field(name='Info sul Ban', value=data['InfoBanKick'], inline=False)
+
+                    await member.send(embed=embed)
+
+                embed = discord.Embed(title='Utente Bannato',
+                                      description='Un utente è stato bannato dal server',
+                                      color=discord.Color.dark_purple())
+
+                embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+                embed.add_field(name='Utente Espulso', value=str(member.mention), inline=False)
+                embed.add_field(name='Motivazione', value=reason, inline=False)
+                embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+                channel = ctx.guild.get_channel(self.log_channel_id)
 
                 await ctx.guild.ban(member, reason=reason)
-                await ctx.channel.send(f"L'utente è stato bannato dal server da {ctx.author}")
+
+                if channel is None:
+                    print(f"\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto"
+                          f" nel file di configurazione")
+                    return
+
+                await channel.send(embed=embed)
 
         except discord.HTTPException:
-            embed = discord.Embed(title=f'Impossibile eseguire il comando {data["Prefix"]}ban',
+            channel = ctx.guild.get_channel(self.log_channel_id)
+
+            embed = discord.Embed(title='Errore di Comando',
+                                  description=f'Impossibile eseguire il comando {data["Prefix"]}ban',
                                   color=discord.Color.dark_purple())
 
-            await ctx.channel.send(embed=embed)
+            embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+            embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+            await ctx.guild.ban(member)
+            await channel.send(embed=embed)
 
 
 def setup(bot):

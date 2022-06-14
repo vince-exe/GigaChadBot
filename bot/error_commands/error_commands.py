@@ -1,8 +1,6 @@
 from discord.ext import commands
 
-from utils.utils import Colors, create_embed_error
-
-import discord
+from utils.utils import Colors
 
 
 class Errors(commands.Cog):
@@ -19,17 +17,7 @@ class Errors(commands.Cog):
             pass
 
         elif isinstance(error, commands.MissingPermissions):
-            fields = [
-                      ('Command Author', str(ctx.author), True),
-                      ('Fail Reason', 'Non hai i permessi necessari per eseguire questo comando', True)
-                     ]
-
-            embed = create_embed_error(title='Command Error',
-                                       color=discord.Color.dark_purple(),
-                                       avatar_url=ctx.message.author.avatar_url,
-                                       field_list=fields)
-
-            await ctx.send(embed=embed)
+            pass
 
 
 def setup(bot):

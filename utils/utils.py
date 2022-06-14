@@ -1,5 +1,7 @@
 from os import listdir
 
+from datetime import date, datetime
+
 import discord
 
 
@@ -38,3 +40,29 @@ def create_embed_error(title, color, avatar_url, field_list):
         embed.add_field(name=name, value=value, inline=inline)
 
     return embed
+
+
+def get_date():
+    year = date.today().year
+
+    month = int(date.today().month)
+    tmp_month = month
+
+    if month <= 9:
+        month = f'0{tmp_month}'
+    else:
+        tmp_month = str(month)
+        month = tmp_month
+
+    day = int(date.today().day)
+    tmp_day = day
+
+    if day <= 9:
+        day = f'0{tmp_day}'
+    else:
+        tmp_day = str(day)
+        day = tmp_day
+
+    time = datetime.now()
+    current_time = time.strftime("%H:%M:%S")
+    return f'{day}/{month}/{year}\t\t{current_time}'
