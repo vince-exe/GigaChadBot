@@ -180,16 +180,17 @@ class Moderation(commands.Cog):
         message.content = str(message.content)
 
         msg = message.content.lower()
+        
+        if not msg.startswith(f'{data["Prefix"]}clear') or msg.startswith(f'{data["Prefix"]}clear_'):
+            # if the user said a word that is present in the blacklist
+            if find_black_word(data['BlackWords'], msg):
+                # delete the message
+                await message.delete()
 
-        # if the user said a word that is present in the blacklist
-        if find_black_word(data['BlackWords'], msg):
-            # delete the message
-            await message.delete()
-
-            # send the embed message to the user
-            await self.send_black_word_embed(user_embed=Moderation.get_blacklist_user_embed(message), message=message,
-                                             failed_embed=Moderation.get_blacklist_failed_embed(message),
-                                             log_embed=Moderation.get_blacklist_log_embed(message))
+                # send the embed message to the user
+                await self.send_black_word_embed(user_embed=Moderation.get_blacklist_user_embed(message), message=message,
+                                                 failed_embed=Moderation.get_blacklist_failed_embed(message),
+                                                 log_embed=Moderation.get_blacklist_log_embed(message))
 
     @commands.command()
     @has_guild_permissions(kick_members=True)
