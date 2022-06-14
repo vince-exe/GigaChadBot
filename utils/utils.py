@@ -66,3 +66,17 @@ def get_date():
     time = datetime.now()
     current_time = time.strftime("%H:%M:%S")
     return f'{day}/{month}/{year}\t\t{current_time}'
+
+
+def find_black_word(black_list, message):
+    for black_word in black_list:
+        for i in range(len(message)):
+            k = 0
+            while black_word[k] == message[i] and i < len(message) and k < len(black_word):
+                k += 1
+                i += 1
+
+                if k == len(black_word):
+                    return True
+
+    return False
