@@ -15,6 +15,7 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.log_channel_id = int(data['LogChannel'])
+        self.fail_log_channel_id = int(data['FailLogChannel'])
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -78,16 +79,22 @@ class Moderation(commands.Cog):
                 await channel.send(embed=embed)
 
         except discord.HTTPException:
-            channel = ctx.guild.get_channel(self.log_channel_id)
+            channel = ctx.guild.get_channel(self.fail_log_channel_id)
+            await ctx.guild.kick(member)
 
-            embed = discord.Embed(title='Errore di Comando',
-                                  description=f'Impossibile eseguire il comando {data["Prefix"]}kick',
+            if channel is None:
+                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
+                return
+
+            embed = discord.Embed(title='Tentativo di Messaggio',
+                                  description="Non ho potuto mandare il messaggio di kick all'utente",
                                   color=discord.Color.dark_purple())
 
             embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+            embed.add_field(name='Utente Espulso', value=member.mention, inline=False)
             embed.add_field(name='Data Comando', value=get_date(), inline=False)
 
-            await ctx.guild.kick(member)
             await channel.send(embed=embed)
 
     @commands.command()
@@ -129,16 +136,22 @@ class Moderation(commands.Cog):
                 await channel.send(embed=embed)
 
         except discord.HTTPException:
-            channel = ctx.guild.get_channel(self.log_channel_id)
+            channel = ctx.guild.get_channel(self.fail_log_channel_id)
+            await ctx.guild.ban(member)
 
-            embed = discord.Embed(title='Errore di Comando',
-                                  description=f'Impossibile eseguire il comando {data["Prefix"]}ban',
+            if channel is None:
+                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
+                return
+
+            embed = discord.Embed(title='Tentativo di Messaggio',
+                                  description="Non ho potuto mandare il messaggio di ban all'utente",
                                   color=discord.Color.dark_purple())
 
             embed.add_field(name='Autore Comando', value=ctx.author.mention, inline=False)
+            embed.add_field(name='Utente Bannato', value=member.mention, inline=False)
             embed.add_field(name='Data Comando', value=get_date(), inline=False)
 
-            await ctx.guild.ban(member)
             await channel.send(embed=embed)
 
 
