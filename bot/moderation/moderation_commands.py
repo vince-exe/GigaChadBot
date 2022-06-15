@@ -49,7 +49,7 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'\n{Colors.Green}--> {Colors.Reset}Moderation commands ready')
+        print(f'{Colors.Green}--> {Colors.Reset}Moderation commands ready')
 
     @commands.Cog.listener()
     async def on_message(self, message):

@@ -16,6 +16,7 @@ if __name__ == '__main__':
     #  create a bot object that we are going to use to connect with Discord APIs
     bot = commands.Bot(command_prefix=data['Prefix'])
 
+    print()
     # load the extensions of the bot
     bot.load_extension('bot.moderation.moderation_commands')
     bot.load_extension('bot.interaction.interaction_commands')

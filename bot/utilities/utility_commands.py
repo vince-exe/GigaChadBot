@@ -6,6 +6,8 @@ from utils.utils import Colors
 
 from config.config import data
 
+from bot.utilities.utility_utils import *
+
 import discord
 
 
@@ -17,6 +19,7 @@ class Utilities(commands.Cog):
     async def on_ready(self):
         print(f'\n{Colors.Green}--> {Colors.Reset}Utilities commands ready')
 
+    # clear the chat based on the given number of message to clear
     @commands.command()
     @has_guild_permissions(manage_channels=True)
     async def clear_(self, ctx, limit_=None):
@@ -32,28 +35,23 @@ class Utilities(commands.Cog):
     async def clear(self, ctx):
         await ctx.channel.purge()
 
+    # return the info about a user
     @commands.command()
     async def whois(self, ctx, member: discord.Member):
-        embed = discord.Embed(title="Informazioni Utente",
-                              color=discord.Color.dark_purple())
-
         role = str(member.top_role)
         if not role.startswith('@'):
             role = '@' + role
 
-        fields = [("Nome", str(member), True),
-                  ("ID", member.id, True),
-                  ("Top Ruolo", role, False),
-                  ("Data Creazione", member.created_at.strftime("%d/%m/%Y %H:%M:%S"), True),
-                  ("Entrato Nel Server", member.joined_at.strftime("%d/%m/%Y %H:%M:%S"), True),
-                  ]
+        await ctx.send(embed=get_whois_embed(member, role))
 
-        for name, value, inline in fields:
-            embed.add_field(name=name, value=value, inline=inline)
-
-        embed.set_thumbnail(url=member.avatar_url)
-
-        await ctx.send(embed=embed)
+    # take the id of a channel and return the channel name
+    @commands.command()
+    @has_guild_permissions(manage_channels=True)
+    async def chinfo(self, ctx, *, channel_id=None):
+        if channel_id is not None:
+            channel = ctx.guild.get_channel(int(channel_id))
+            if channel is not None:
+                await ctx.channel.send(embed=get_channel_info_embed(ctx, channel))
 
 
 def setup(bot):

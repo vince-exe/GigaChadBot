@@ -2,6 +2,16 @@ from utils.utils import GeneralErrors, Colors
 
 import json
 
+json_keys = {'Token': None,
+             'MaxPrefixLen': None,
+             'Prefix': None,
+             'BlackWords': None,
+             'LogChannel': None,
+             'FailLogChannel': None,
+             'SpamLogChannel': None,
+             'InfoBanKick': None
+             }
+
 
 class JsonErrors:
     FileNotFound = -1
@@ -17,10 +27,14 @@ class JsonConfigsConstants:
     MaxInfoLen = 80
 
 
-def read_config(config_path):
+def read_config(config_path, json_keys_: dict):
     try:
         with open(config_path, 'r') as file:
             data_ = json.load(file)
+
+        # check if the user modified the key's name in the config.json file
+        if set(data_.keys()) != set(json_keys_.keys()):
+            return JsonErrors.KeyModified
 
         # check if the max len imposed by the user isn't greater of the max len consented by the program
         if int(data_['MaxPrefixLen']) > JsonConfigsConstants.MaxLenPrefix:
@@ -36,9 +50,6 @@ def read_config(config_path):
 
         # check if he modified the key "Token"
         return data_
-
-    except KeyError:
-        return JsonErrors.KeyModified
 
     except FileNotFoundError:
         return JsonErrors.FileNotFound
@@ -71,8 +82,7 @@ def handle_config_errors(error):
         return False
 
     elif error == JsonErrors.KeyModified:
-        print(f"{Colors.Red}\nERROR: {Colors.Reset}hai modificato il nome di una key nel file di configurazione"
-              f" in the config file")
+        print(f"{Colors.Red}\nERROR: {Colors.Reset}hai modificato il nome di una key nel file di configurazione")
         return False
 
     elif error == JsonErrors.MaxPrefError:
@@ -86,4 +96,4 @@ def handle_config_errors(error):
     return error
 
 
-data = handle_config_errors(read_config('config/config.json'))
+data = handle_config_errors(read_config('config/config.json', json_keys))
