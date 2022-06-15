@@ -1,7 +1,5 @@
 from discord.ext import commands
 
-from utils.utils import load_ext
-
 from utils.utils import GeneralErrors, Colors, DiscordErrors
 
 from config.config import data
@@ -18,10 +16,11 @@ if __name__ == '__main__':
     #  create a bot object that we are going to use to connect with Discord APIs
     bot = commands.Bot(command_prefix=data['Prefix'])
 
-    load_ext('bot/moderation_commands', bot)
-    load_ext('bot/iteration_commands', bot)
-    load_ext('bot/utility_commands', bot)
-    load_ext('bot/error_commands', bot)
+    # load the extensions of the bot
+    bot.load_extension('bot.moderation.moderation_commands')
+    bot.load_extension('bot.interaction.interaction_commands')
+    bot.load_extension('bot.utilities.utility_commands')
+    bot.load_extension('bot.errors.error_commands')
 
     #  start the run method to connect with the Discord server
     try:

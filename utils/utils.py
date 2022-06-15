@@ -1,5 +1,3 @@
-from os import listdir
-
 from datetime import date, datetime
 
 import discord
@@ -23,23 +21,6 @@ class Colors:
     Yellow = "\033[1m" + "\u001b[33m"
     Blu = "\033[1m" + "\033[94m"
     Reset = "\033[1m" + "\u001b[0m"
-
-
-def load_ext(dir_name, bot):
-    for filename in listdir(f'./{dir_name}'):
-        if filename.endswith('.py'):
-            bot.load_extension(f'{dir_name.replace("/", ".")}.{filename[:-3]}')
-
-
-def create_embed_error(title, color, avatar_url, field_list):
-    embed = discord.Embed(title=title, color=color)
-
-    embed.set_thumbnail(url=avatar_url)
-
-    for name, value, inline in field_list:
-        embed.add_field(name=name, value=value, inline=inline)
-
-    return embed
 
 
 def get_date():
