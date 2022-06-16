@@ -130,3 +130,44 @@ def get_ban_failed_embed(ctx, member):
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
 
     return embed
+
+
+# return the blacklist status
+def get_blacklist_status_embed(blacklist_status):
+    embed = discord.Embed(title='Stato BlackList',
+                          color=discord.Color.dark_purple())
+
+    # if the blacklist is on
+    if blacklist_status:
+        embed.add_field(name='Stato', value='Attiva', inline=True)
+        return embed
+
+    # if the blacklist isn't on
+    embed.add_field(name='Stato', value='Disattivata', inline=True)
+    return embed
+
+
+def get_blacklist_changed_embed(blacklist_status_before, ctx):
+    embed = discord.Embed(title='BlackList Status Modificato',
+                          description='un utente ha modificato lo stato della blacklist',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Utente', value=str(ctx.author), inline=False)
+
+    # set the status before and after the command
+
+    if blacklist_status_before:
+        embed.add_field(name='Stato Prima', value='Attiva', inline=False)
+        embed.add_field(name='Stato Ora', value='Disattiva', inline=False)
+    else:
+        embed.add_field(name='Stato Prima', value='Disattiva', inline=False)
+        embed.add_field(name='Stato Ora', value='Attiva', inline=False)
+
+    # set the date and the channel where the command has been executed
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Canale Esecuzione', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+
+    return embed

@@ -17,6 +17,7 @@ class Moderation(commands.Cog):
         self.log_channel_id = int(data['LogChannel'])
         self.fail_log_channel_id = int(data['FailLogChannel'])
         self.spam_log_channel_id = int(data['SpamLogChannel'])
+        self.black_list_status = True
 
     async def send_black_word_embed(self, user_embed, message, failed_embed, log_embed):
         try:
@@ -53,21 +54,25 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        message.content = str(message.content)
+        try:
+            message.content = str(message.content)
 
-        msg = message.content.lower()
+            msg = message.content.lower()
 
-        if not msg.startswith(f'{data["Prefix"]}clear') or msg.startswith(f'{data["Prefix"]}clear_'):
-            # if the user said a word that is present in the blacklist
-            if find_black_word(data['BlackWords'], msg):
-                # delete the message
-                await message.delete()
+            # check if the blacklist status is on
+            if self.black_list_status:
+                # if the user said a word that is present in the blacklist
+                if find_black_word(data['BlackWords'], msg):
+                    # delete the message
+                    await message.delete()
 
-                # send the embed message to the user
-                await self.send_black_word_embed(user_embed=get_black_word_user_embed(message, data),
-                                                 message=message,
-                                                 failed_embed=get_black_word_failed_embed(message),
-                                                 log_embed=get_black_word_log_embed(message))
+                    # send the embed message to the user
+                    await self.send_black_word_embed(user_embed=get_black_word_user_embed(message, data),
+                                                     message=message,
+                                                     failed_embed=get_black_word_failed_embed(message),
+                                                     log_embed=get_black_word_log_embed(message))
+        except IndexError:
+            pass
 
     @commands.command()
     @has_guild_permissions(kick_members=True)
@@ -138,6 +143,45 @@ class Moderation(commands.Cog):
 
             # send the embed message in the fail log channel
             await channel.send(embed=get_ban_failed_embed(ctx, member))
+
+    # set the blacklist status based on the given mode, Mode = "on" BlackList = True vice versa False
+    @has_guild_permissions(administrator=True)
+    @commands.command()
+    async def set_blacklist(self, ctx, *, mode):
+        mode_ = str(mode).lower()
+
+        # check if the status was already the status that he gave
+        if (mode_ == 'on' and self.black_list_status) or (mode_ == 'off' and not self.black_list_status):
+            return
+
+        if mode_ == 'on':
+            # get the channel where the bot has to send the log message
+            channel = ctx.guild.get_channel(self.log_channel_id)
+
+            if channel is not None:
+                await channel.send(embed=get_blacklist_changed_embed(self.black_list_status, ctx))
+            else:
+                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
+
+            self.black_list_status = True
+
+        elif mode_ == 'off':
+            channel = ctx.guild.get_channel(self.log_channel_id)
+
+            if channel is not None:
+                await channel.send(embed=get_blacklist_changed_embed(self.black_list_status, ctx))
+            else:
+                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
+
+            self.black_list_status = False
+
+    # return the embed with the blacklist status
+    @has_guild_permissions(mute_members=True)
+    @commands.command()
+    async def get_blacklist(self, ctx):
+        await ctx.channel.send(embed=get_blacklist_status_embed(self.black_list_status))
 
 
 def setup(bot):

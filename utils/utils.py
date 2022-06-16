@@ -53,7 +53,7 @@ def find_black_word(black_list, message):
     for black_word in black_list:
         for i in range(len(message)):
             k = 0
-            while black_word[k] == message[i] and i < len(message) and k < len(black_word):
+            while black_word[k] == message[i] and i < len(message):
                 k += 1
                 i += 1
 
