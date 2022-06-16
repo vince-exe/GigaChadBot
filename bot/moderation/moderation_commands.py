@@ -4,7 +4,7 @@ from discord.ext.commands import has_guild_permissions
 
 from utils.utils import Colors, find_black_word
 
-from config.config import data
+from saves.saves import Saves
 
 from bot.moderation.moderation_utils import *
 
@@ -14,9 +14,9 @@ import discord
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.log_channel_id = int(data['LogChannel'])
-        self.fail_log_channel_id = int(data['FailLogChannel'])
-        self.spam_log_channel_id = int(data['SpamLogChannel'])
+        self.log_channel_id = int(Config.get_log_channel())
+        self.fail_log_channel_id = int(Config.get_fail_log_channel())
+        self.spam_log_channel_id = int(Config.get_spam_log_channel())
         self.black_list_status = True
 
     async def send_black_word_embed(self, user_embed, message, failed_embed, log_embed):
@@ -62,12 +62,12 @@ class Moderation(commands.Cog):
             # check if the blacklist status is on
             if self.black_list_status:
                 # if the user said a word that is present in the blacklist
-                if find_black_word(data['BlackWords'], msg):
+                if find_black_word(Saves.black_words_json['BlackWords'], msg):
                     # delete the message
                     await message.delete()
 
                     # send the embed message to the user
-                    await self.send_black_word_embed(user_embed=get_black_word_user_embed(message, data),
+                    await self.send_black_word_embed(user_embed=get_black_word_user_embed(message),
                                                      message=message,
                                                      failed_embed=get_black_word_failed_embed(message),
                                                      log_embed=get_black_word_log_embed(message))
@@ -82,7 +82,7 @@ class Moderation(commands.Cog):
             if reason is not None:
                 # check if the user is not a bot
                 if not member.bot:
-                    await member.send(embed=get_kick_embed(ctx, reason, data['InfoBanKick']))
+                    await member.send(embed=get_kick_embed(ctx, reason))
 
                 # get the log channel
                 channel = ctx.guild.get_channel(self.log_channel_id)
@@ -119,7 +119,7 @@ class Moderation(commands.Cog):
         try:
             if reason is not None:
                 if not member.bot:
-                    await member.send(embed=get_ban_embed(ctx, reason, data['InfoBanKick']))
+                    await member.send(embed=get_ban_embed(ctx, reason))
 
                 channel = ctx.guild.get_channel(self.log_channel_id)
                 await ctx.guild.ban(member, reason=reason)

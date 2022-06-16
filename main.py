@@ -1,22 +1,27 @@
 from discord.ext import commands
 
-from utils.utils import GeneralErrors, Colors, DiscordErrors
+from utils.utils import InitErrors, Colors
 
-from config.config import data
+from config.config import Config
 
 from aiohttp.client_exceptions import ClientConnectorError
+
+from saves.saves import Saves
 
 import discord
 
 
 if __name__ == '__main__':
-    if not data:
-        exit(GeneralErrors.ReadingSettingsError)
+    # try to init the Config class
+    if not Config.init():
+        exit(InitErrors.Reading_Settings_Error)
+
+    if Saves.black_words_json is None:
+        exit(InitErrors.Reading_Settings_Error)
 
     #  create a bot object that we are going to use to connect with Discord APIs
-    bot = commands.Bot(command_prefix=data['Prefix'])
+    bot = commands.Bot(command_prefix=Config.get_prefix())
 
-    print()
     # load the extensions of the bot
     bot.load_extension('bot.moderation.moderation_commands')
     bot.load_extension('bot.interaction.interaction_commands')
@@ -25,15 +30,15 @@ if __name__ == '__main__':
 
     #  start the run method to connect with the Discord server
     try:
-        bot.run(data['Token'])
+        bot.run(Config.get_token())
 
     except KeyboardInterrupt:
-        exit(GeneralErrors.KeyBoardInterrupt_)
+        exit(InitErrors.Key_Board_Interrupt)
 
     except discord.errors.LoginFailure:
         print(f"\n{Colors.Red}ERROR: {Colors.Reset}Invalid token")
-        exit(DiscordErrors.InvalidToken)
+        exit(InitErrors.Invalid_Token)
 
     except ClientConnectorError:
         print(f"\n{Colors.Red}ERROR: {Colors.Reset}Can't connect to Discord")
-        exit(GeneralErrors.ConnectionError_)
+        exit(InitErrors.Connection_Error)

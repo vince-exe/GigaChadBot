@@ -4,8 +4,6 @@ from discord.ext.commands import has_guild_permissions
 
 from utils.utils import Colors
 
-from config.config import data
-
 from bot.utilities.utility_utils import *
 
 import discord
@@ -23,12 +21,9 @@ class Utilities(commands.Cog):
     @commands.command()
     @has_guild_permissions(manage_channels=True)
     async def clear_(self, ctx, limit_=None):
-        if limit_ is None:
-            await ctx.send(f'Parametri insufficienti, digita {data["Prefix"]}help per maggiori informazioni')
-
-        else:
+        if limit_ is not None and limit_ >= 1:
             await ctx.channel.purge(limit=int(limit_))
-
+    
     # Clear the All the chat
     @commands.command()
     @has_guild_permissions(manage_channels=True)

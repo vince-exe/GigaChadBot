@@ -1,13 +1,15 @@
 from utils.utils import get_date
 
+from config.config import Config
+
 import discord
 
 
 # return the embed to send to the user, that worn he of the use of a black word
-def get_black_word_user_embed(message, data):
+def get_black_word_user_embed(message):
     embed = discord.Embed(title='Black Word',
                           description=f"Il bot ha segnalato allo staff l'utilizzo di una black word"
-                                      f" da parte tua, digita {data['Prefix']}blackwords per avere"
+                                      f" da parte tua, digita {Config.get_prefix()}blackwords per avere"
                                       f" la lista delle black words del server",
                           color=discord.Color.dark_purple())
 
@@ -34,7 +36,7 @@ def get_black_word_log_embed(message):
 
 
 # return the embed to send to the user, if he got banned
-def get_ban_embed(ctx, reason, info_ban_kick):
+def get_ban_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
                           description='sei stato bannato dal server',
                           color=discord.Color.dark_purple(),
@@ -43,7 +45,7 @@ def get_ban_embed(ctx, reason, info_ban_kick):
     embed.add_field(name='Staffer', value=ctx.author, inline=False)
     embed.add_field(name='Motivazione', value=reason, inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
-    embed.add_field(name='Info sul Ban', value=info_ban_kick, inline=False)
+    embed.add_field(name='Info sul Ban', value=Config.get_info_ban_kick(), inline=False)
 
     return embed
 
@@ -64,7 +66,7 @@ def get_black_word_failed_embed(message):
 
 
 # return the Kick Embed to send to the user
-def get_kick_embed(ctx, reason, info_ban_kick):
+def get_kick_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
                           description='sei stato espulso dal server',
                           color=discord.Color.dark_purple(),
@@ -73,7 +75,7 @@ def get_kick_embed(ctx, reason, info_ban_kick):
     embed.add_field(name='Staffer', value=ctx.author, inline=False)
     embed.add_field(name='Motivazione', value=reason, inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
-    embed.add_field(name='Info sul Kick', value=info_ban_kick, inline=False)
+    embed.add_field(name='Info sul Kick', value=Config.get_info_ban_kick(), inline=False)
 
     return embed
 

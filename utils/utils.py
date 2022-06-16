@@ -1,20 +1,22 @@
 from datetime import date, datetime
 
-import discord
 
-
-class GeneralErrors:
-    ReadingSettingsError = -5
-    KeyBoardInterrupt_ = -1
-    ValueError_ = -2
-    ConnectionError_ = -3
-
-
-class DiscordErrors:
-    InvalidToken = -1
+class InitErrors:
+    """
+        Class that contain all the errors, that the program could have
+        in the initialization part
+    """
+    Key_Board_Interrupt = -1
+    Value_Error = -2
+    Connection_Error = -3
+    Invalid_Token = -4
+    Reading_Settings_Error = -5
 
 
 class Colors:
+    """
+        Class that contain all the properties to color the terminal
+    """
     Green = "\033[1m" + "\u001b[32m"
     Magenta = "\033[1m" + "\u001b[35m"
     Red = "\033[1m" + "\u001b[31m"
@@ -23,6 +25,7 @@ class Colors:
     Reset = "\033[1m" + "\u001b[0m"
 
 
+# return the current date + the time
 def get_date():
     year = date.today().year
 
@@ -49,6 +52,7 @@ def get_date():
     return f'{day}/{month}/{year}\t\t{current_time}'
 
 
+# class that return True if the given message contain a word that is present in the list
 def find_black_word(black_list, message):
     for black_word in black_list:
         for i in range(len(message)):

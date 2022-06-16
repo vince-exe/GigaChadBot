@@ -2,12 +2,6 @@
     "Token": "#",
     "MaxPrefixLen": 3,
     "Prefix": "?",
-    "BlackWords": [
-        "nigga",
-        "negro",
-        "frocio",
-        "ricchione"
-    ],
     "LogChannel": "986245756853821530",
     "FailLogChannel": "986342185148502026",
     "SpamLogChannel": "986393413660344360",
