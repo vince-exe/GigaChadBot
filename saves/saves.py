@@ -10,12 +10,11 @@ class Saves:
     """
     __black_words_json = None
     __black_words_list = []
-    __new_black_words_saves = False
+    __black_list_saves = False
     __blackwords_json_path = None
 
     # variable that contain the possible error in reading the json file
     __errors = None
-
 
     @classmethod
     def load_black_words_list(cls, path):
@@ -45,16 +44,28 @@ class Saves:
             return False
 
         Saves.__black_words_list.append(black_word)
-        Saves.__new_black_words_saves = True
+        Saves.__black_list_saves = True
         return True
+
+    # remove the given black word from the black words list
+    @classmethod
+    def rm_black_word(cls, black_word):
+        # try to remove the black word if it's present in the list, else return False
+        try:
+            Saves.__black_words_list.remove(black_word)
+            Saves.__black_list_saves = True
+            return True
+        except ValueError:
+            return False
 
     # saves all the new modify to the json files
     @classmethod
     def save_all(cls):
         # check if the class has to save new things
-        if Saves.__new_black_words_saves:
+        if Saves.__black_list_saves:
             Saves.__black_words_json['BlackWords'] = Saves.__black_words_list
 
+            # open the json file and rewrite the Black Words list, then close the file
             with open(Saves.__blackwords_json_path, 'w') as file:
                 json.dump(Saves.__black_words_json, file)
 

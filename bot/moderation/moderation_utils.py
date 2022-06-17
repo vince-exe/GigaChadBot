@@ -210,3 +210,38 @@ def black_word_already_exist_embed(ctx, black_word: str):
                     inline=False)
 
     return embed
+
+
+# return the embed, when the administrator remove a black word from the black list
+def remove_blackword_embed(ctx, black_word: str):
+    embed = discord.Embed(title='Black Word Rimossa',
+                          description='un amministratore ha rimosso una black word',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Utente', value=str(ctx.author), inline=False)
+    embed.add_field(name='Black Word Rimossa', value=black_word, inline=False)
+    embed.add_field(name='Canale', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed, when the administrator try to remove an inexistent black word from the black list
+def fail_removed_blackword_embed(ctx, black_word: str):
+    embed = discord.Embed(title='Tentativo Rimozione Black Word',
+                          description='un amministratore ha cercato di rimuovere una black word',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Utente', value=str(ctx.author), inline=False)
+    embed.add_field(name='Black Word', value=black_word, inline=False)
+    embed.add_field(name='Canale', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Motivo Fallimento', value='La black word non esiste', inline=False)
+
+    return embed

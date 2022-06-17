@@ -206,6 +206,22 @@ class Moderation(commands.Cog):
             else:
                 await channel.send(embed=black_word_already_exist_embed(ctx, black_word))
 
+    # remove the given black word from the black words list
+    @has_guild_permissions(administrator=True)
+    @commands.command()
+    async def rm_blackword(self, ctx, *, black_word):
+        channel = ctx.guild.get_channel(self.spam_log_channel_id)
+
+        if channel is None:
+            print(f'{Colors.Red}ERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto'
+                  f' nel file di configurazione')
+            return
+
+        if Saves.rm_black_word(str(black_word).lower()):
+            await channel.send(embed=remove_blackword_embed(ctx, black_word))
+        else:
+            await channel.send(embed=fail_removed_blackword_embed(ctx, black_word))
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
