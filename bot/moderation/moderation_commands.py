@@ -14,9 +14,11 @@ import discord
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
         self.log_channel_id = int(Config.get_log_channel())
         self.fail_log_channel_id = int(Config.get_fail_log_channel())
         self.spam_log_channel_id = int(Config.get_spam_log_channel())
+
         self.black_list_status = True
 
     async def send_black_word_embed(self, user_embed, message, failed_embed, log_embed):
@@ -60,9 +62,9 @@ class Moderation(commands.Cog):
             msg = message.content.lower()
 
             # check if the blacklist status is on
-            if self.black_list_status:
+            if self.black_list_status and (not msg.startswith(f'{Config.get_prefix()}add_black')):
                 # if the user said a word that is present in the blacklist
-                if find_black_word(Saves.black_words_json['BlackWords'], msg):
+                if find_black_word(Saves.get_blackwords(), msg):
                     # delete the message
                     await message.delete()
 
@@ -182,6 +184,27 @@ class Moderation(commands.Cog):
     @commands.command()
     async def get_blacklist(self, ctx):
         await ctx.channel.send(embed=get_blacklist_status_embed(self.black_list_status))
+
+    # add the given black word to the black words list
+    @has_guild_permissions(administrator=True)
+    @commands.command()
+    async def add_blackword(self, ctx, *, black_word=None):
+        channel = ctx.guild.get_channel(self.spam_log_channel_id)
+
+        if black_word is not None:
+            # cast and transform to lower case the black_word
+            black_word = str(black_word).lower()
+            # check if the black_words has been added correctly
+            if Saves.add_black_word(black_word):
+                if channel is None:
+                    print(f'{Colors.Red}ERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto'
+                          f' nel file di configurazione')
+                    return
+
+                await channel.send(embed=get_add_blacklist_word_embed(ctx, black_word))
+            # if the black_word already exist
+            else:
+                await channel.send(embed=black_word_already_exist_embed(ctx, black_word))
 
 
 def setup(bot):

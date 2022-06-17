@@ -149,6 +149,7 @@ def get_blacklist_status_embed(blacklist_status):
     return embed
 
 
+# return the embed when a user change the blacklist status
 def get_blacklist_changed_embed(blacklist_status_before, ctx):
     embed = discord.Embed(title='BlackList Status Modificato',
                           description='un utente ha modificato lo stato della blacklist',
@@ -171,5 +172,41 @@ def get_blacklist_changed_embed(blacklist_status_before, ctx):
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
     embed.add_field(name='Canale Esecuzione', value=str(ctx.channel.name), inline=False)
     embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+
+    return embed
+
+
+# return the embed, when an administrator add a new black_word to the black_words_list
+def get_add_blacklist_word_embed(ctx, black_word: str):
+    embed = discord.Embed(title='Nuova Black Word',
+                          description='un amministratore ha aggiunto una nuova parola bandita',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Utente', value=str(ctx.author), inline=False)
+    embed.add_field(name='Black Word', value=black_word, inline=False)
+    embed.add_field(name='Canale', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed, when an administrator try to add a black_word that already exist
+def black_word_already_exist_embed(ctx, black_word: str):
+    embed = discord.Embed(title='Tentativo Inserimento Black Word',
+                          description='un amministratore ha cercato di aggiungere una black word',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Utente', value=str(ctx.author), inline=False)
+    embed.add_field(name='Black Word', value=black_word, inline=False)
+    embed.add_field(name='Canale', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Motivo Fallimento', value="La black word è già presente all'interno della black words lista",
+                    inline=False)
 
     return embed

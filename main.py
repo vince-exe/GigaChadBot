@@ -12,11 +12,8 @@ import discord
 
 
 if __name__ == '__main__':
-    # try to init the Config class
-    if not Config.init():
-        exit(InitErrors.Reading_Settings_Error)
-
-    if Saves.black_words_json is None:
+    # try to init the Config and Saves class
+    if not (Config.init() and Saves.init()):
         exit(InitErrors.Reading_Settings_Error)
 
     #  create a bot object that we are going to use to connect with Discord APIs
@@ -42,3 +39,6 @@ if __name__ == '__main__':
     except ClientConnectorError:
         print(f"\n{Colors.Red}ERROR: {Colors.Reset}Can't connect to Discord")
         exit(InitErrors.Connection_Error)
+
+    # save all the changes
+    Saves.save_all()
