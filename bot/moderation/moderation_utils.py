@@ -2,6 +2,8 @@ from utils.utils import get_date
 
 from config.config import Config
 
+from saves.saves import Saves
+
 import discord
 
 
@@ -170,7 +172,7 @@ def get_blacklist_changed_embed(blacklist_status_before, ctx):
 
     # set the date and the channel where the command has been executed
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
-    embed.add_field(name='Canale Esecuzione', value=str(ctx.channel.name), inline=False)
+    embed.add_field(name='Canale Executions', value=str(ctx.channel.name), inline=False)
     embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
 
     return embed
@@ -243,5 +245,21 @@ def fail_removed_blackword_embed(ctx, black_word: str):
     embed.add_field(name='Id Canale', value=str(ctx.channel.id), inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
     embed.add_field(name='Motivo Fallimento', value='La black word non esiste', inline=False)
+
+    return embed
+
+
+# return all the black words
+def get_blacklist_embed(ctx):
+    embed = discord.Embed(title='Lista Black Words',
+                          description='lista completa delle parole bandite',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    black_words_counter = 1
+    for black_word in Saves.get_blackwords():
+        embed.add_field(name=f'# {black_words_counter}', value=black_word, inline=False)
+        black_words_counter += 1
 
     return embed

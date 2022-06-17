@@ -16,22 +16,23 @@ if __name__ == '__main__':
     if not (Config.init() and Saves.init()):
         exit(InitErrors.Reading_Settings_Error)
 
-    #  create a bot object that we are going to use to connect with Discord APIs
+    # create a bot object that we are going to use to connect with Discord APIs
     bot = commands.Bot(command_prefix=Config.get_prefix())
 
-    # load the extensions of the bot
+    #   load the extensions of the bot
     bot.load_extension('bot.moderation.moderation_commands')
     bot.load_extension('bot.interaction.interaction_commands')
     bot.load_extension('bot.utilities.utility_commands')
     bot.load_extension('bot.errors.error_commands')
 
-    #  start the run method to connect with the Discord server
+    # start the run method to connect with the Discord server
     try:
         bot.run(Config.get_token())
 
     except KeyboardInterrupt:
         exit(InitErrors.Key_Board_Interrupt)
 
+    # if the token isn't valid
     except discord.errors.LoginFailure:
         print(f"\n{Colors.Red}ERROR: {Colors.Reset}Invalid token")
         exit(InitErrors.Invalid_Token)

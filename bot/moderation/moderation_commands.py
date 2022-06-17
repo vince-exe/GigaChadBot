@@ -4,8 +4,6 @@ from discord.ext.commands import has_guild_permissions
 
 from utils.utils import Colors, find_black_word
 
-from saves.saves import Saves
-
 from bot.moderation.moderation_utils import *
 
 import discord
@@ -20,6 +18,7 @@ class Moderation(commands.Cog):
         self.spam_log_channel_id = int(Config.get_spam_log_channel())
 
         self.black_list_status = True
+        self.sleep_channels_list = []
 
     async def send_black_word_embed(self, user_embed, message, failed_embed, log_embed):
         try:
@@ -52,27 +51,35 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'{Colors.Green}--> {Colors.Reset}Moderation commands ready')
+        print(f'\n{Colors.Green}--> {Colors.Reset}Moderation commands ready')
 
     @commands.Cog.listener()
     async def on_message(self, message):
         try:
             message.content = str(message.content)
-
             msg = message.content.lower()
 
-            # check if the blacklist status is on
-            if self.black_list_status and (not msg.startswith(f'{Config.get_prefix()}add_black')):
-                # if the user said a word that is present in the blacklist
-                if find_black_word(Saves.get_blackwords(), msg):
-                    # delete the message
-                    await message.delete()
+            # check if the channel is a sleeping channel and the administrator want to wakeup the channel
+            if message.channel.id in self.sleep_channels_list:
+                await message.delete()
+                return
 
-                    # send the embed message to the user
-                    await self.send_black_word_embed(user_embed=get_black_word_user_embed(message),
-                                                     message=message,
-                                                     failed_embed=get_black_word_failed_embed(message),
-                                                     log_embed=get_black_word_log_embed(message))
+            # check if the blacklist status is on
+            if self.black_list_status:
+                # if the message doesn't start with this strings
+                if not (msg.startswith(f'{Config.get_prefix()}add_blackword') or
+                        msg.startswith(f'{Config.get_prefix()}rm_blackword')):
+
+                    # if the user said a word that is present in the blacklist
+                    if find_black_word(Saves.get_blackwords(), msg):
+                        # delete the message
+                        await message.delete()
+
+                        # send the embed message to the user
+                        await self.send_black_word_embed(user_embed=get_black_word_user_embed(message),
+                                                         message=message,
+                                                         failed_embed=get_black_word_failed_embed(message),
+                                                         log_embed=get_black_word_log_embed(message))
         except IndexError:
             pass
 
@@ -221,6 +228,36 @@ class Moderation(commands.Cog):
             await channel.send(embed=remove_blackword_embed(ctx, black_word))
         else:
             await channel.send(embed=fail_removed_blackword_embed(ctx, black_word))
+
+    # send the black list to the message author
+    @commands.command()
+    async def blacklist(self, ctx):
+        try:
+            # send the blacklist embed to the user
+            await ctx.author.send(embed=get_blacklist_embed(ctx))
+
+        # if the bot can't sand the message
+        except discord.HTTPException:
+            return
+
+    @has_guild_permissions(manage_channels=True)
+    @commands.command()
+    async def sleep(self, ctx, *, id_: int):
+        # check if the channel exist
+        if ctx.guild.get_channel(id_) is not None:
+            # add the channel id to the list of sleeping channels
+            self.sleep_channels_list.append(id_)
+
+    @has_guild_permissions(manage_channels=True)
+    @commands.command()
+    async def wakeup(self, ctx, *, id_: int):
+        if ctx.guild.get_channel(id):
+            if ctx.guild.get_channel(id_) is not None:
+                try:
+                    self.sleep_channels_list.remove(id_)
+
+                except ValueError:
+                    pass
 
 
 def setup(bot):
