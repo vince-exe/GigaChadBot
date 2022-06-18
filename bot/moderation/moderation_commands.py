@@ -59,11 +59,6 @@ class Moderation(commands.Cog):
             message.content = str(message.content)
             msg = message.content.lower()
 
-            # check if the channel is a sleeping channel and the administrator want to wakeup the channel
-            if message.channel.id in self.sleep_channels_list:
-                await message.delete()
-                return
-
             # check if the blacklist status is on
             if self.black_list_status:
                 # if the message doesn't start with this strings
@@ -239,25 +234,6 @@ class Moderation(commands.Cog):
         # if the bot can't sand the message
         except discord.HTTPException:
             return
-
-    @has_guild_permissions(manage_channels=True)
-    @commands.command()
-    async def sleep(self, ctx, *, id_: int):
-        # check if the channel exist
-        if ctx.guild.get_channel(id_) is not None:
-            # add the channel id to the list of sleeping channels
-            self.sleep_channels_list.append(id_)
-
-    @has_guild_permissions(manage_channels=True)
-    @commands.command()
-    async def wakeup(self, ctx, *, id_: int):
-        if ctx.guild.get_channel(id):
-            if ctx.guild.get_channel(id_) is not None:
-                try:
-                    self.sleep_channels_list.remove(id_)
-
-                except ValueError:
-                    pass
 
 
 def setup(bot):
