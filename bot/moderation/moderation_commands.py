@@ -59,14 +59,24 @@ class Moderation(commands.Cog):
             message.content = str(message.content)
             msg = message.content.lower()
 
+            # if the channel is a DM channel, do nothing
+            if isinstance(message.channel, discord.DMChannel):
+                return
+
+            # if the message is longer than the Max Message Len
+            if len(message.content) > Config.get_max_message_len():
+                await message.delete()
+                return
+
             # check if the blacklist status is on
             if self.black_list_status:
                 # if the message doesn't start with this strings
                 if not (msg.startswith(f'{Config.get_prefix()}add_blackword') or
                         msg.startswith(f'{Config.get_prefix()}rm_blackword')):
 
-                    # if the user said a word that is present in the blacklist
-                    if find_black_word(Saves.get_blackwords(), msg):
+                    # if the user said a word that is present in the blacklist and it' not an excluded user from
+                    # the black list control
+                    if find_black_word(Saves.get_blackwords(), msg) and not check_role(message):
                         # delete the message
                         await message.delete()
 
@@ -226,7 +236,7 @@ class Moderation(commands.Cog):
 
     # send the black list to the message author
     @commands.command()
-    async def blacklist(self, ctx):
+    async def blackwords(self, ctx):
         try:
             # send the blacklist embed to the user
             await ctx.author.send(embed=get_blacklist_embed(ctx))

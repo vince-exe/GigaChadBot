@@ -32,7 +32,9 @@ class Config:
         'LogChannel': None,
         'FailLogChannel': None,
         'SpamLogChannel': None,
-        'InfoBanKick': None
+        'InfoBanKick': None,
+        'RolesOutBlackWordCheck': None,
+        'MaxMessageLen': None
     }
 
     # class constants
@@ -86,6 +88,14 @@ class Config:
     @classmethod
     def get_info_ban_kick(cls):
         return str(Config.__configs['InfoBanKick'])
+
+    @classmethod
+    def get_roles_out_blacklist(cls):
+        return Config.__configs['RolesOutBlackWordCheck']
+
+    @classmethod
+    def get_max_message_len(cls):
+        return Config.__configs['MaxMessageLen']
 
     # main method, used to [inizialize] the class
     @classmethod

@@ -263,3 +263,11 @@ def get_blacklist_embed(ctx):
         black_words_counter += 1
 
     return embed
+
+
+def check_role(message):
+    for role in message.author.roles:
+        if role.id in Config.get_roles_out_blacklist():
+            return True
+
+    return False
