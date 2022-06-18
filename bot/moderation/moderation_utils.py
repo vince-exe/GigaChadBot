@@ -293,8 +293,8 @@ def check_role(message):
 
 # check if the channel where the message has been written is a moderation channel
 def is_moderation_channel(channel_id):
-    if channel_id in Config.get_moderation_channels():
-        print('ok')
-        return True
+    for id_ in Config.get_moderation_channels():
+        if id_ == channel_id:
+            return True
 
     return False

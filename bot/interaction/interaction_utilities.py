@@ -1,5 +1,7 @@
 from saves.saves import Saves
 
+from config.config import Config
+
 import discord
 
 
@@ -59,3 +61,11 @@ def get_channel_info_embed(ctx, channel: discord.abc.GuildChannel):
     # set the creation time of a channel
     embed.add_field(name='Data Creazione', value=channel.created_at.strftime("%d/%m/%Y %H:%M:%S"), inline=False)
     return embed
+
+
+def is_interaction_channel(channel_id):
+    for id_ in Config.get_interaction_channels():
+        if id_ == channel_id:
+            return True
+
+    return False

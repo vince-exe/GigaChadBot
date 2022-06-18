@@ -35,7 +35,8 @@ class Config:
         'InfoBanKick': None,
         'RolesOutBlackWordCheck': None,
         'MaxMessageLen': None,
-        'ModerationChannels': None
+        'ModerationChannels': None,
+        'InteractionChannels': None
     }
 
     # class constants
@@ -100,7 +101,11 @@ class Config:
 
     @classmethod
     def get_moderation_channels(cls):
-        return Config.__configs['ModerationCommandsChannels']
+        return Config.__configs['ModerationChannels']
+
+    @classmethod
+    def get_interaction_channels(cls):
+        return Config.__configs['InteractionChannels']
 
     # main method, used to [inizialize] the class
     @classmethod

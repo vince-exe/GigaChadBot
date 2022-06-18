@@ -17,11 +17,17 @@ class Interaction(commands.Cog):
 
     @commands.command()
     async def hello(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
         author = str(ctx.author)
         await ctx.send(f'Ciao {author[0:len(author) - 5]}')
 
     @commands.command()
     async def repeat(self, ctx, message=None):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
         if message is None:
             await ctx.send('Cosa devo ripetere bro??')
         else:
@@ -30,6 +36,9 @@ class Interaction(commands.Cog):
     # return the info about a user
     @commands.command()
     async def whois(self, ctx, member: discord.Member):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
         role = str(member.top_role)
         if not role.startswith('@'):
             role = '@' + role
@@ -40,6 +49,9 @@ class Interaction(commands.Cog):
     @commands.command()
     @has_guild_permissions(manage_channels=True)
     async def chinfo(self, ctx, *, channel_id=None):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
         if channel_id is not None:
             channel = ctx.guild.get_channel(int(channel_id))
             if channel is not None:
@@ -48,6 +60,9 @@ class Interaction(commands.Cog):
     # send the black list to the message author
     @commands.command()
     async def blackwords(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
         try:
             # send the blacklist embed to the user
             await ctx.author.send(embed=get_blacklist_embed(ctx))

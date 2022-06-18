@@ -1,16 +1,29 @@
 {
     "Token": "#",
+
     "MaxPrefixLen": 3,
+
     "Prefix": "?",
+
     "LogChannel": 986245756853821530,
+
     "FailLogChannel": 986342185148502026,
+
     "SpamLogChannel": 986393413660344360,
+
     "InfoBanKick": "contatta lo staff per maggiori informazioni",
+
     "RolesOutBlackWordCheck": [
         984553100822077470
     ],
+
     "MaxMessageLen": 300,
+
     "ModerationChannels": [
         987716352619978762
+    ],
+
+    "InteractionChannels": [
+        987853201627832390
     ]
 }

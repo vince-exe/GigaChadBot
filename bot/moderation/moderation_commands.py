@@ -61,7 +61,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        print(ctx.channel.id)
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         try:
             # check if there is a reason
             if reason is not None:
@@ -101,6 +103,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         try:
             if reason is not None:
                 if not member.bot:
@@ -133,6 +138,9 @@ class Moderation(commands.Cog):
     @has_guild_permissions(administrator=True)
     @commands.command()
     async def set_blacklist(self, ctx, *, mode):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         mode_ = str(mode).lower()
 
         # check if the status was already the status that he gave
@@ -172,6 +180,9 @@ class Moderation(commands.Cog):
     @has_guild_permissions(administrator=True)
     @commands.command()
     async def add_blackword(self, ctx, *, black_word=None):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         channel = ctx.guild.get_channel(self.spam_log_channel_id)
 
         if black_word is not None:
@@ -193,6 +204,9 @@ class Moderation(commands.Cog):
     @has_guild_permissions(administrator=True)
     @commands.command()
     async def rm_blackword(self, ctx, *, black_word):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         channel = ctx.guild.get_channel(self.spam_log_channel_id)
 
         if channel is None:
@@ -212,7 +226,7 @@ class Moderation(commands.Cog):
         if limit_ is not None and limit_ >= 1:
             await ctx.channel.purge(limit=int(limit_))
 
-    # Clear the All the chat
+    # clear the All the chat
     @commands.command()
     @has_guild_permissions(manage_channels=True)
     async def clear(self, ctx):
