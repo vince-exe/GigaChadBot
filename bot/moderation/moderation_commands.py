@@ -2,9 +2,11 @@ from discord.ext import commands
 
 from discord.ext.commands import has_guild_permissions
 
-from utils.utils import Colors, find_black_word
+from utils.utils import find_black_word
 
 from bot.moderation.moderation_utils import *
+
+from saves.saves import Saves
 
 import discord
 
@@ -13,41 +15,12 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.log_channel_id = int(Config.get_log_channel())
-        self.fail_log_channel_id = int(Config.get_fail_log_channel())
-        self.spam_log_channel_id = int(Config.get_spam_log_channel())
+        self.log_channel_id = Config.get_log_channel()
+        self.fail_log_channel_id = Config.get_fail_log_channel()
+        self.spam_log_channel_id = Config.get_spam_log_channel()
 
         self.black_list_status = True
         self.sleep_channels_list = []
-
-    async def send_black_word_embed(self, user_embed, message, failed_embed, log_embed):
-        try:
-            # try to send the embed message to the user
-            await message.author.send(embed=user_embed)
-
-            channel = message.guild.get_channel(self.spam_log_channel_id)
-
-            # check if the channel is none
-            if channel is None:
-                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di spam logo non esiste, inserisci un id corretto '
-                      f' nel file di configurazione')
-                return
-
-            await channel.send(embed=log_embed)
-
-        # send the embed to the fail log channel
-        except discord.HTTPException:
-            # get the channel where the bot has to send the fail logs
-            channel = message.guild.get_channel(self.fail_log_channel_id)
-
-            # if the channel doesn't exist
-            if channel is None:
-                print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
-                      f' nel file di configurazione')
-                return
-
-            # if the channel exist, send the fail log message, into the channel
-            await channel.send(embed=failed_embed)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -81,16 +54,14 @@ class Moderation(commands.Cog):
                         await message.delete()
 
                         # send the embed message to the user
-                        await self.send_black_word_embed(user_embed=get_black_word_user_embed(message),
-                                                         message=message,
-                                                         failed_embed=get_black_word_failed_embed(message),
-                                                         log_embed=get_black_word_log_embed(message))
+                        await send_black_word_embed(message, [self.spam_log_channel_id, self.fail_log_channel_id])
         except IndexError:
             pass
 
     @commands.command()
     @has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
+        print(ctx.channel.id)
         try:
             # check if there is a reason
             if reason is not None:
@@ -234,16 +205,18 @@ class Moderation(commands.Cog):
         else:
             await channel.send(embed=fail_removed_blackword_embed(ctx, black_word))
 
-    # send the black list to the message author
+    # clear the chat based on the given number of message to clear
     @commands.command()
-    async def blackwords(self, ctx):
-        try:
-            # send the blacklist embed to the user
-            await ctx.author.send(embed=get_blacklist_embed(ctx))
+    @has_guild_permissions(manage_channels=True)
+    async def clear_(self, ctx, limit_=None):
+        if limit_ is not None and limit_ >= 1:
+            await ctx.channel.purge(limit=int(limit_))
 
-        # if the bot can't sand the message
-        except discord.HTTPException:
-            return
+    # Clear the All the chat
+    @commands.command()
+    @has_guild_permissions(manage_channels=True)
+    async def clear(self, ctx):
+        await ctx.channel.purge()
 
 
 def setup(bot):

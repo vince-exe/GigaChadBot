@@ -34,7 +34,8 @@ class Config:
         'SpamLogChannel': None,
         'InfoBanKick': None,
         'RolesOutBlackWordCheck': None,
-        'MaxMessageLen': None
+        'MaxMessageLen': None,
+        'ModerationChannels': None
     }
 
     # class constants
@@ -75,15 +76,15 @@ class Config:
 
     @classmethod
     def get_log_channel(cls):
-        return str(Config.__configs['LogChannel'])
+        return Config.__configs['LogChannel']
 
     @classmethod
     def get_fail_log_channel(cls):
-        return str(Config.__configs['FailLogChannel'])
+        return Config.__configs['FailLogChannel']
 
     @classmethod
     def get_spam_log_channel(cls):
-        return str(Config.__configs['SpamLogChannel'])
+        return Config.__configs['SpamLogChannel']
 
     @classmethod
     def get_info_ban_kick(cls):
@@ -96,6 +97,10 @@ class Config:
     @classmethod
     def get_max_message_len(cls):
         return Config.__configs['MaxMessageLen']
+
+    @classmethod
+    def get_moderation_channels(cls):
+        return Config.__configs['ModerationCommandsChannels']
 
     # main method, used to [inizialize] the class
     @classmethod

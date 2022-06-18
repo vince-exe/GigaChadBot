@@ -1,6 +1,25 @@
+from saves.saves import Saves
+
 import discord
 
 
+# return all the black words
+def get_blacklist_embed(ctx):
+    embed = discord.Embed(title='Lista Black Words',
+                          description='lista completa delle parole bandite',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    black_words_counter = 1
+    for black_word in Saves.get_blackwords():
+        embed.add_field(name=f'# {black_words_counter}', value=black_word, inline=False)
+        black_words_counter += 1
+
+    return embed
+
+
+#  return the embed that contains all the information about a user
 def get_whois_embed(member, role):
     embed = discord.Embed(title="Informazioni Utente",
                           color=discord.Color.dark_purple())
@@ -21,6 +40,7 @@ def get_whois_embed(member, role):
     return embed
 
 
+# return the embed that contain all the info about a channel
 def get_channel_info_embed(ctx, channel: discord.abc.GuildChannel):
     embed = discord.Embed(title='Informazioni Canale',
                           color=discord.Color.dark_purple())

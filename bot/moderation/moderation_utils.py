@@ -2,9 +2,40 @@ from utils.utils import get_date
 
 from config.config import Config
 
-from saves.saves import Saves
+from utils.utils import Colors
 
 import discord
+
+
+async def send_black_word_embed(message, log_channels):
+    try:
+        # try to send the embed message to the user
+        await message.author.send(embed=get_black_word_user_embed(message))
+
+        # get the spam log channel
+        channel = message.guild.get_channel(log_channels[0])
+
+        # check if the channel is none
+        if channel is None:
+            print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di spam logo non esiste, inserisci un id corretto '
+                  f' nel file di configurazione')
+            return
+
+        await channel.send(embed=get_black_word_log_embed(message))
+
+    # send the embed to the fail log channel
+    except discord.HTTPException:
+        # get the channel where the bot has to send the fail logs
+        channel = message.guild.get_channel(log_channels[1])
+
+        # if the channel doesn't exist
+        if channel is None:
+            print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
+                  f' nel file di configurazione')
+            return
+
+        # if the channel exist, send the fail log message, into the channel
+        await channel.send(embed=get_black_word_failed_embed(message))
 
 
 # return the embed to send to the user, that worn he of the use of a black word
@@ -15,10 +46,11 @@ def get_black_word_user_embed(message):
                                       f" la lista delle black words del server",
                           color=discord.Color.dark_purple())
 
-    embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
-    embed.add_field(name='Id Canale', value=str(message.channel.id), inline=False)
     embed.add_field(name='Autore Messaggio', value=str(message.author), inline=False)
     embed.add_field(name='Messaggio', value=str(message.content), inline=False)
+    embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(message.channel.id), inline=False)
+    embed.add_field(name='Data Messaggio', value=get_date(), inline=False)
 
     return embed
 
@@ -29,10 +61,11 @@ def get_black_word_log_embed(message):
                           description=f'un utente ha utilizzato una black word',
                           color=discord.Color.dark_purple())
 
-    embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
-    embed.add_field(name='Id Canale', value=str(message.channel.id), inline=False)
     embed.add_field(name='Autore Messaggio', value=str(message.author), inline=False)
     embed.add_field(name='Messaggio', value=str(message.content), inline=False)
+    embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
+    embed.add_field(name='Id Canale', value=str(message.channel.id), inline=False)
+    embed.add_field(name='Data Messaggio', value=get_date(), inline=False)
 
     return embed
 
@@ -59,9 +92,9 @@ def get_black_word_failed_embed(message):
                                       f" black word")
 
     embed.add_field(name='Autore Messaggio', value=str(message.author), inline=False)
+    embed.add_field(name='Messaggio', value=str(message.content), inline=False)
     embed.add_field(name='Canale Server', value=str(message.channel.name), inline=False)
     embed.add_field(name='Id Canale', value=str(message.channel.id), inline=False)
-    embed.add_field(name='Messaggio', value=str(message.content), inline=False)
     embed.add_field(name='Data Messaggio', value=get_date(), inline=False)
 
     return embed
@@ -249,25 +282,19 @@ def fail_removed_blackword_embed(ctx, black_word: str):
     return embed
 
 
-# return all the black words
-def get_blacklist_embed(ctx):
-    embed = discord.Embed(title='Lista Black Words',
-                          description='lista completa delle parole bandite',
-                          color=discord.Color.dark_purple())
-
-    embed.set_thumbnail(url=ctx.author.avatar_url)
-
-    black_words_counter = 1
-    for black_word in Saves.get_blackwords():
-        embed.add_field(name=f'# {black_words_counter}', value=black_word, inline=False)
-        black_words_counter += 1
-
-    return embed
-
-
+# check if the given role is excluded from the control on the black words
 def check_role(message):
     for role in message.author.roles:
         if role.id in Config.get_roles_out_blacklist():
             return True
+
+    return False
+
+
+# check if the channel where the message has been written is a moderation channel
+def is_moderation_channel(channel_id):
+    if channel_id in Config.get_moderation_channels():
+        print('ok')
+        return True
 
     return False

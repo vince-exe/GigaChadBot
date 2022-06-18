@@ -2,14 +2,18 @@ from discord.ext import commands
 
 from utils.utils import Colors
 
+from bot.interaction.interaction_utilities import *
 
-class Iterations(commands.Cog):
+from discord.ext.commands import has_guild_permissions
+
+
+class Interaction(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'\n{Colors.Green}--> {Colors.Reset}Iterations commands ready')
+        print(f'\n{Colors.Green}--> {Colors.Reset}Interaction commands ready')
 
     @commands.command()
     async def hello(self, ctx):
@@ -23,6 +27,35 @@ class Iterations(commands.Cog):
         else:
             await ctx.send(ctx.message.content[len('?repeat'):])
 
+    # return the info about a user
+    @commands.command()
+    async def whois(self, ctx, member: discord.Member):
+        role = str(member.top_role)
+        if not role.startswith('@'):
+            role = '@' + role
+
+        await ctx.send(embed=get_whois_embed(member, role))
+
+    # take the id of a channel and return the channel name
+    @commands.command()
+    @has_guild_permissions(manage_channels=True)
+    async def chinfo(self, ctx, *, channel_id=None):
+        if channel_id is not None:
+            channel = ctx.guild.get_channel(int(channel_id))
+            if channel is not None:
+                await ctx.channel.send(embed=get_channel_info_embed(ctx, channel))
+
+    # send the black list to the message author
+    @commands.command()
+    async def blackwords(self, ctx):
+        try:
+            # send the blacklist embed to the user
+            await ctx.author.send(embed=get_blacklist_embed(ctx))
+
+        # if the bot can't sand the message
+        except discord.HTTPException:
+            return
+
 
 def setup(bot):
-    bot.add_cog(Iterations(bot))
+    bot.add_cog(Interaction(bot))

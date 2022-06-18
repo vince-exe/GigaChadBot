@@ -22,7 +22,6 @@ if __name__ == '__main__':
     #   load the extensions of the bot
     bot.load_extension('bot.moderation.moderation_commands')
     bot.load_extension('bot.interaction.interaction_commands')
-    bot.load_extension('bot.utilities.utility_commands')
     bot.load_extension('bot.errors.error_commands')
 
     # start the run method to connect with the Discord server
