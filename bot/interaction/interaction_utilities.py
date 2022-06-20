@@ -4,6 +4,7 @@ from config.config import Config
 
 import discord
 
+from random import randint
 
 # return all the black words
 def get_blacklist_embed(ctx):
@@ -74,6 +75,18 @@ def get_channel_info_embed(ctx, channel: discord.abc.GuildChannel):
 
     # set the creation time of a channel
     embed.add_field(name='Data Creazione', value=channel.created_at.strftime("%d/%m/%Y %H:%M:%S"), inline=False)
+    return embed
+
+
+# return the embed that contain a citation
+def get_citation_embed():
+    embed = discord.Embed(title='Citazione Pescata',
+                          color=discord.Color.dark_purple())
+
+    citations = Saves.get_citations()
+    rand = randint(0, len(citations) - 1)
+
+    embed.add_field(name='Citazione', value=citations[rand], inline=False)
     return embed
 
 

@@ -84,6 +84,13 @@ class Interaction(commands.Cog):
         except discord.HTTPException:
             return
 
+    @commands.command()
+    async def citation(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        await ctx.channel.send(embed=get_citation_embed())
+
 
 def setup(bot):
     bot.add_cog(Interaction(bot))
