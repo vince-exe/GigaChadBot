@@ -13,10 +13,24 @@ def get_blacklist_embed(ctx):
 
     embed.set_thumbnail(url=ctx.author.avatar_url)
 
-    black_words_counter = 1
-    for black_word in Saves.get_blackwords():
-        embed.add_field(name=f'# {black_words_counter}', value=black_word, inline=False)
-        black_words_counter += 1
+    black_words = Saves.get_blackwords()
+    for i in range(len(black_words)):
+        embed.add_field(name=f'# {i + 1}', value=black_words[i], inline=False)
+
+    return embed
+
+
+# return all the citations
+def get_citations_embed(ctx):
+    embed = discord.Embed(title='Lista Citazioni',
+                          description='lista completa delle citazioni del bot',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    citations_list = Saves.get_citations()
+    for i in range(len(citations_list)):
+        embed.add_field(name=f'# {i + 1}', value=citations_list[i], inline=False)
 
     return embed
 

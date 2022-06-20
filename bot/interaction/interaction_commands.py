@@ -67,7 +67,20 @@ class Interaction(commands.Cog):
             # send the blacklist embed to the user
             await ctx.author.send(embed=get_blacklist_embed(ctx))
 
-        # if the bot can't sand the message
+        # if the bot can't sand the message in the direct channel
+        except discord.HTTPException:
+            return
+
+    # send the citation list to the message author
+    @commands.command()
+    async def citations(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        try:
+            # send the citation list embed to the user
+            await ctx.author.send(embed=get_citations_embed(ctx))
+
         except discord.HTTPException:
             return
 

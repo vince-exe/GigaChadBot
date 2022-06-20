@@ -174,6 +174,9 @@ class Moderation(commands.Cog):
     @has_guild_permissions(mute_members=True)
     @commands.command()
     async def get_blacklist(self, ctx):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         await ctx.channel.send(embed=get_blacklist_status_embed(self.black_list_status))
 
     # add the given black word to the black words list
