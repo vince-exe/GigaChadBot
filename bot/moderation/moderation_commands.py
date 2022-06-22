@@ -10,6 +10,8 @@ from saves.saves import Saves
 
 import discord
 
+import asyncio
+
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -240,8 +242,8 @@ class Moderation(commands.Cog):
     # mute a user, (not the microphone)
     @has_guild_permissions(mute_members=True)
     @commands.command()
-    async def mute(self, ctx, member: discord.Member, *, reason=None):
-        if reason is None:
+    async def mute(self, ctx, member: discord.Member, time=None, unit=None, *, reason=None):
+        if reason is None or time is None or unit is None:
             return
 
         role = ctx.guild.get_role(self.mute_role_id)
@@ -251,8 +253,8 @@ class Moderation(commands.Cog):
 
             fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
             if fail_channel is None:
-                print(f'{Colors.Red}\nERROR: Il canale di fail log non esiste, inserisci un id corretto nel file di '
-                      f'configurazione{Colors.Reset}')
+                print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di fail log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
             else:
                 await fail_channel.send(embed=get_fail_muted_embed(ctx, member, reason))
             return
@@ -262,10 +264,21 @@ class Moderation(commands.Cog):
 
         if log_channel is None:
             print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto nel'
-                  f' nel file di configurazione{Colors.Reset}')
+                  f' nel file di configurazione')
             return
 
         await log_channel.send(embed=get_muted_log_embed(ctx, member, reason))
+
+    # unmute a user
+    @has_guild_permissions(mute_members=True)
+    @commands.command()
+    async def unmute(self, ctx, member: discord.Member):
+        role = ctx.guild.get_role(self.mute_role_id)
+
+        if role is None:
+            return
+
+        await member.remove_roles(role)
 
 
 def setup(bot):
