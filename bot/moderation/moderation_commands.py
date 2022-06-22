@@ -19,6 +19,8 @@ class Moderation(commands.Cog):
         self.fail_log_channel_id = Config.get_fail_log_channel()
         self.spam_log_channel_id = Config.get_spam_log_channel()
 
+        self.mute_role_id = Config.get_mute_role()
+
         self.black_list_status = True
         self.sleep_channels_list = []
 
@@ -234,6 +236,36 @@ class Moderation(commands.Cog):
     @has_guild_permissions(manage_channels=True)
     async def clear(self, ctx):
         await ctx.channel.purge()
+
+    # mute a user, (not the microphone)
+    @has_guild_permissions(mute_members=True)
+    @commands.command()
+    async def mute(self, ctx, member: discord.Member, *, reason=None):
+        if reason is None:
+            return
+
+        role = ctx.guild.get_role(self.mute_role_id)
+        if role is None:
+            print(f"{Colors.Red}\nERROR: {Colors.Reset}Impossibile mutare l'utente, inserire un id corretto nella voce"
+                  f" 'MuteRole' nel file di configurazione")
+
+            fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
+            if fail_channel is None:
+                print(f'{Colors.Red}\nERROR: Il canale di fail log non esiste, inserisci un id corretto nel file di '
+                      f'configurazione{Colors.Reset}')
+            else:
+                await fail_channel.send(embed=get_fail_muted_embed(ctx, member, reason))
+            return
+
+        await member.add_roles(role)
+        log_channel = ctx.guild.get_channel(self.spam_log_channel_id)
+
+        if log_channel is None:
+            print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto nel'
+                  f' nel file di configurazione{Colors.Reset}')
+            return
+
+        await log_channel.send(embed=get_muted_log_embed(ctx, member, reason))
 
 
 def setup(bot):

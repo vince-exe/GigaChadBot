@@ -36,7 +36,8 @@ class Config:
         'RolesOutBlackWordCheck': None,
         'MaxMessageLen': None,
         'ModerationChannels': None,
-        'InteractionChannels': None
+        'InteractionChannels': None,
+        'MuteRole': None
     }
 
     # class constants
@@ -106,6 +107,10 @@ class Config:
     @classmethod
     def get_interaction_channels(cls):
         return Config.__configs['InteractionChannels']
+
+    @classmethod
+    def get_mute_role(cls):
+        return Config.__configs['MuteRole']
 
     # main method, used to [inizialize] the class
     @classmethod
