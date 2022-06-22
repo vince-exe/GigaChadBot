@@ -283,7 +283,7 @@ def fail_removed_blackword_embed(ctx, black_word: str):
 
 
 # return the embed, when a user went muted
-def get_muted_log_embed(ctx, user, reason):
+def get_muted_log_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Utente Mutato',
                           description='un utente è stato mutato da uno staffer',
                           color=discord.Color.dark_purple()
@@ -295,12 +295,12 @@ def get_muted_log_embed(ctx, user, reason):
     embed.add_field(name='Motivazione', value=reason, inline=False)
     embed.add_field(name='Utente', value=str(user), inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
-
+    embed.add_field(name='Durata Mute', value=muted_time, inline=False)
     return embed
 
 
 # return the embed, when a staffer try to mute a user, but the command went wrong
-def get_fail_muted_embed(ctx, user, reason):
+def get_fail_muted_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Tentativo Di Mute',
                           description='uno staffer ha tentato di mutare un utente',
                           color=discord.Color.dark_purple()
@@ -312,8 +312,61 @@ def get_fail_muted_embed(ctx, user, reason):
     embed.add_field(name='Motivazione', value=reason, inline=False)
     embed.add_field(name='Utente', value=str(user), inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Durata Mute', value=muted_time, inline=False)
     embed.add_field(name='Motivo Fail', value="Id del ruolo mute incorretto, contattare il gestore del bot",
                     inline=False)
+
+    return embed
+
+
+# return the embed that warn the user that he has been muted
+def get_muted_user_embed(ctx, user, reason, muted_time):
+    embed = discord.Embed(title='Sei Stato Mutato',
+                          description='uno staffer ti ha mutato',
+                          color=discord.Color.dark_purple()
+                          )
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Motivazione', value=reason, inline=False)
+    embed.add_field(name='Utente', value=str(user), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Durata Mute', value=muted_time, inline=False)
+
+    embed.set_footer(text='aspetta la fine della durata del mute per poter scrivenere')
+    return embed
+
+
+# return the embed when a user went unmuted (by time)
+def get_unmuted_log_embed(ctx, user, reason, muted_time):
+    embed = discord.Embed(title='Utente Smutato',
+                          description="un utente è stato smutato",
+                          color=discord.Color.dark_purple()
+                          )
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Motivazione', value=reason, inline=False)
+    embed.add_field(name='Utente', value=str(user), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Durata Mute', value=muted_time, inline=False)
+
+    return embed
+
+
+# return the embed when an admin unmute a member with the ('Prefix'unmute) command (so not by time)
+def get_admin_unmute_embed(ctx, user):
+    embed = discord.Embed(title='Admin Ha Smutato Utente',
+                          description=f'un admin ha usato il comando {Config.get_prefix()}unmute per smutare un utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Admin', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(user), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
 
     return embed
 
@@ -334,3 +387,19 @@ def is_moderation_channel(channel_id):
             return True
 
     return False
+
+
+# calculate the amount of time to sleep in the mute command
+def calculate_sleep_time(unit, time):
+    if unit == 's':
+        return 1 * time
+
+    elif unit == 'm':
+        return 60 * time
+
+    elif unit == 'h':
+        return 3600 * time
+
+    # day
+    else:
+        return 86400 * time

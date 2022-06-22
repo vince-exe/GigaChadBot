@@ -243,31 +243,55 @@ class Moderation(commands.Cog):
     @has_guild_permissions(mute_members=True)
     @commands.command()
     async def mute(self, ctx, member: discord.Member, time=None, unit=None, *, reason=None):
-        if reason is None or time is None or unit is None:
-            return
+        try:
+            if reason is None or time is None or unit is None:
+                return
 
-        role = ctx.guild.get_role(self.mute_role_id)
-        if role is None:
-            print(f"{Colors.Red}\nERROR: {Colors.Reset}Impossibile mutare l'utente, inserire un id corretto nella voce"
-                  f" 'MuteRole' nel file di configurazione")
+            unit = str(unit).lower()
+            time = int(time)
 
-            fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
-            if fail_channel is None:
-                print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di fail log non esiste, inserisci un id corretto'
+            if not (unit == 's' or unit == 'm' or unit == 'h' or unit == 'd'):
+                return
+
+            role = ctx.guild.get_role(self.mute_role_id)
+            if role is None:
+                print(f"{Colors.Red}\nERROR: {Colors.Reset}Impossibile mutare l'utente, inserire un id corretto"
+                      f" nella voce 'MuteRole' nel file di configurazione")
+
+                fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
+                if fail_channel is None:
+                    print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di fail log non esiste, inserisci un id'
+                          f' corretto nel file di configurazione')
+
+                else:
+                    await fail_channel.send(embed=get_fail_muted_embed(ctx, member, reason, f'{time}{unit}'))
+                return
+
+            # add the mute role to the user
+            await member.add_roles(role)
+            log_channel = ctx.guild.get_channel(self.spam_log_channel_id)
+
+            if log_channel is None:
+                print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto'
                       f' nel file di configurazione')
-            else:
-                await fail_channel.send(embed=get_fail_muted_embed(ctx, member, reason))
+                return
+
+            # send the muted log
+            await log_channel.send(embed=get_muted_log_embed(ctx, member, reason, f'{time}{unit}'))
+            # send the muted message to the user
+            await member.send(embed=get_muted_user_embed(ctx, member, reason, f'{time}{unit}'))
+            # sleep the given amount of time
+            await asyncio.sleep(calculate_sleep_time(unit, time))
+            # remove the muted role
+            await member.remove_roles(role)
+            # send the unmuted log
+            await log_channel.send(embed=get_unmuted_log_embed(ctx, member, reason, f'{time}{unit}'))
+
+        except ValueError:
             return
 
-        await member.add_roles(role)
-        log_channel = ctx.guild.get_channel(self.spam_log_channel_id)
-
-        if log_channel is None:
-            print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto nel'
-                  f' nel file di configurazione')
+        except discord.HTTPException:
             return
-
-        await log_channel.send(embed=get_muted_log_embed(ctx, member, reason))
 
     # unmute a user
     @has_guild_permissions(mute_members=True)
@@ -278,7 +302,17 @@ class Moderation(commands.Cog):
         if role is None:
             return
 
+        channel = ctx.guild.get_channel(self.spam_log_channel_id)
+
+        if channel is None:
+            print(f'{Colors.Red}\nERROR: {Colors.Reset}Il canale di spam log non esiste, inserisci un id corretto nel'
+                  f' file di configurazione')
+            return
+
+        # remove the unmute role to the user
         await member.remove_roles(role)
+        # send the log message un the log channel
+        await channel.send(embed=get_admin_unmute_embed(ctx, member))
 
 
 def setup(bot):

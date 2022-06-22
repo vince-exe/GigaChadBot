@@ -31,7 +31,7 @@ def get_citations_embed(ctx):
 
     citations_list = Saves.get_citations()
     for i in range(len(citations_list)):
-        embed.add_field(name=f'# {i + 1}', value=citations_list[i], inline=False)
+        embed.add_field(name=f'# {i + 1}', value=str(citations_list[i]), inline=False)
 
     return embed
 
@@ -86,7 +86,7 @@ def get_citation_embed():
     citations = Saves.get_citations()
     rand = randint(0, len(citations) - 1)
 
-    embed.add_field(name='Citazione', value=citations[rand], inline=False)
+    embed.add_field(name='Citazione', value=str(citations[rand]), inline=False)
     return embed
 
 
