@@ -42,7 +42,7 @@ async def send_black_word_embed(message, log_channels):
 def get_black_word_user_embed(message):
     embed = discord.Embed(title='Black Word',
                           description=f"Il bot ha segnalato allo staff l'utilizzo di una black word"
-                                      f" da parte tua, digita {Config.get_prefix()}blackwords per avere"
+                                      f" da parte tua nel server digita {Config.get_prefix()}blackwords per avere"
                                       f" la lista delle black words del server",
                           color=discord.Color.dark_purple())
 
@@ -73,7 +73,7 @@ def get_black_word_log_embed(message):
 # return the embed to send to the user, if he got banned
 def get_ban_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
-                          description='sei stato bannato dal server',
+                          description=f'sei stato bannato dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple(),
                           )
 
@@ -89,7 +89,7 @@ def get_ban_embed(ctx, reason):
 def get_black_word_failed_embed(message):
     embed = discord.Embed(title='Tentativo di Messaggio',
                           description=f"non ho potuto mandare il messaggio di warning per utilizzo di una"
-                                      f" black word")
+                                      f" black word ad un utente")
 
     embed.add_field(name='Autore Messaggio', value=str(message.author), inline=False)
     embed.add_field(name='Messaggio', value=str(message.content), inline=False)
@@ -103,7 +103,7 @@ def get_black_word_failed_embed(message):
 # return the Kick Embed to send to the user
 def get_kick_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
-                          description='sei stato espulso dal server',
+                          description=f'sei stato espulso dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple(),
                           )
 
@@ -118,7 +118,7 @@ def get_kick_embed(ctx, reason):
 # return the Kick Embed to send in the log channel
 def get_kick_log_embed(ctx, member, reason):
     embed = discord.Embed(title='Utente Espulso',
-                          description='Un utente è stato espulso dal server',
+                          description=f'Un utente è stato espulso dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple())
 
     embed.add_field(name='Autore Comando', value=ctx.author, inline=False)
@@ -132,7 +132,7 @@ def get_kick_log_embed(ctx, member, reason):
 # return the Ban Embed to send in the log channel
 def get_ban_log_embed(ctx, member, reason):
     embed = discord.Embed(title='Utente Bannato',
-                          description='Un utente è stato bannato dal server',
+                          description=f'Un utente è stato bannato dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple())
 
     embed.add_field(name='Autore Comando', value=ctx.author, inline=False)
@@ -187,7 +187,7 @@ def get_blacklist_status_embed(blacklist_status):
 # return the embed when a user change the blacklist status
 def get_blacklist_changed_embed(blacklist_status_before, ctx):
     embed = discord.Embed(title='BlackList Status Modificato',
-                          description='un utente ha modificato lo stato della blacklist',
+                          description='uno staffer ha modificato lo stato della blacklist',
                           color=discord.Color.dark_purple())
 
     embed.set_thumbnail(url=ctx.author.avatar_url)
@@ -334,7 +334,7 @@ def get_muted_user_embed(ctx, user, reason, muted_time):
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
     embed.add_field(name='Durata Mute', value=muted_time, inline=False)
 
-    embed.set_footer(text='aspetta la fine della durata del mute per poter scrivenere')
+    embed.set_footer(text='aspetta la fine della durata del mute per poter scrivere')
     return embed
 
 
@@ -367,6 +367,46 @@ def get_admin_unmute_embed(ctx, user):
     embed.add_field(name='Admin', value=str(ctx.author), inline=False)
     embed.add_field(name='Utente', value=str(user), inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed when a user get unbanned
+def get_unban_user_embed(ctx, member):
+    embed = discord.Embed(title='Utente Sbannato',
+                          description='un admin ha sbannato un utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Admin', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed of the complete banned users list
+def get_banned_list_embed(ctx, banned_list):
+    embed = discord.Embed(title='Lista Utenti Bannati',
+                          description='lista completi degli utenti bannati dal server',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    i = 0
+    for user in banned_list:
+        embed.add_field(name=f'# {i + 1}', value=f'{user[1] }', inline=False)
+        i += 1
+
+    return embed
+
+
+# return the embed when the banned list is empty
+def get_empty_banned_list_embed():
+    embed = discord.Embed(title='Lista Utenti Bannati',
+                          description='la lista degli utenti bannati è vuota',
+                          color=discord.Color.dark_purple())
 
     return embed
 

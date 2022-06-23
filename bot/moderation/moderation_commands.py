@@ -309,10 +309,44 @@ class Moderation(commands.Cog):
                   f' file di configurazione')
             return
 
-        # remove the unmute role to the user
+        # remove the unmuted role to the user
         await member.remove_roles(role)
         # send the log message un the log channel
         await channel.send(embed=get_admin_unmute_embed(ctx, member))
+
+    # unban a user
+    @has_guild_permissions(ban_members=True)
+    @commands.command()
+    async def unban(self, ctx, *, member):
+        banned_users = await ctx.guild.bans()
+
+        member_name, member_discriminator = member.split('#')
+
+        for ban_entry in banned_users:
+            user = ban_entry.user
+
+            if (user.name, user.discriminator) == (member_name, member_discriminator):
+                await ctx.guild.unban(user)
+
+                log_channel = ctx.guild.get_channel(self.log_channel_id)
+                if log_channel is None:
+                    print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di log channel non esiste, inserisci un id '
+                          f'corretto nel file di configurazione')
+                    return
+
+                await log_channel.send(embed=get_unban_user_embed(ctx, member))
+
+    # return the complete banned users list
+    @has_guild_permissions(ban_members=True)
+    @commands.command()
+    async def banlist(self, ctx):
+        banned_list = await ctx.guild.bans()
+
+        # if the list is empty, send the message to warn the admin that the list is empty
+        if not len(banned_list):
+            return await ctx.channel.send(embed=get_empty_banned_list_embed())
+
+        await ctx.channel.send(embed=get_banned_list_embed(ctx, banned_list))
 
 
 def setup(bot):
