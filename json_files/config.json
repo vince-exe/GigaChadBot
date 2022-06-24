@@ -1,7 +1,5 @@
 {
-    "Token": "",
-
-    "MaxPrefixLen": 3,
+    "Token": "#",
 
     "Prefix": "?",
 
@@ -17,7 +15,7 @@
         984553100822077470
     ],
 
-    "MaxMessageLen": 300,
+    "MaxMessageLen": 1000   ,
 
     "ModerationChannels": [
         987716352619978762,

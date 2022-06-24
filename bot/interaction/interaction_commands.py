@@ -47,7 +47,6 @@ class Interaction(commands.Cog):
 
     # take the id of a channel and return the channel name
     @commands.command()
-    @has_guild_permissions(manage_channels=True)
     async def chinfo(self, ctx, *, channel_id=None):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -85,11 +84,23 @@ class Interaction(commands.Cog):
             return
 
     @commands.command()
-    async def citation(self, ctx):
-        if not is_interaction_channel(ctx.channel.id):
-            return
+    async def citation(self, ctx, *, command=None):
+        # return the list of all the commands
+        if command is None:
+            pass
 
-        await ctx.channel.send(embed=get_citation_embed())
+        # return the description of a specific command
+
+    @commands.command()
+    async def help(self, ctx, *, command=None):
+        # print the complete commands list
+        if command is None:
+            return await ctx.channel.send(embed=get_commands_list_embed(ctx))
+
+        # check if the command that he searched is present in the commands list
+        if command in Config.commands_list.keys():
+            return await ctx.channel.send(embed=get_specific_command_embed(ctx, (command,
+                                                                                 Config.commands_list.get(command))))
 
 
 def setup(bot):

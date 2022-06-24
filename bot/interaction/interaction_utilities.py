@@ -6,6 +6,7 @@ import discord
 
 from random import randint
 
+
 # return all the black words
 def get_blacklist_embed(ctx):
     embed = discord.Embed(title='Lista Black Words',
@@ -87,6 +88,32 @@ def get_citation_embed():
     rand = randint(0, len(citations) - 1)
 
     embed.add_field(name='Citazione', value=str(citations[rand]), inline=False)
+    return embed
+
+
+# return the embed that contain the list of all the commands
+def get_commands_list_embed(ctx):
+    embed = discord.Embed(title='Lista Comandi',
+                          description='Lista di tutti i comandi che il bot dispone',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    for command in Config.commands_list.items():
+        embed.add_field(name=f'{Config.get_prefix()}{command[0]}', value=command[1], inline=False)
+
+    embed.set_footer(text=f'digita {Config.get_prefix()}help [comando] per avere informazioni specifiche su un comando')
+    return embed
+
+
+# return the embed that contain a specific command description
+def get_specific_command_embed(ctx, command):
+    embed = discord.Embed(title='Descrizione Comando',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+    embed.add_field(name=command[0], value=command[1], inline=False)
+
     return embed
 
 

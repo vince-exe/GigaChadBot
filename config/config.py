@@ -27,7 +27,6 @@ class Config:
     # this dictionary has all the names of the default config.json keys
     default_keys = {
         'Token': None,
-        'MaxPrefixLen': None,
         'Prefix': None,
         'LogChannel': None,
         'FailLogChannel': None,
@@ -38,6 +37,29 @@ class Config:
         'ModerationChannels': None,
         'InteractionChannels': None,
         'MuteRole': None
+    }
+
+    # this dictionary contains all the commands name and their descriptions
+    commands_list = {
+        'hello': "il bot saluterà chi invoca questo comando",
+        'repeat': "il bot ripeterà la frase dettata",
+        'whois': "ritorna le informazioni sull'utente taggato dopo il comando",
+        'chinfo': "ritorna le informazioni di uno specifico canale",
+        'blackwords': "manda nei DM la lista delle parole bandite all'utente che ha eseguito il comando",
+        'citations': "manda nei DM la lista delle citazioni del bot all'utente che ha eseguito il comando",
+        'citation': "il bot annuncia una citazione casuale nel canale in cui il comando è stato eseguito",
+        'kick': "espelle un utente dal server",
+        'ban': "banna un utente dal server",
+        'set_blacklist': "attiva o disattiva il controllo del bot sulle blackwords, di default è attivo",
+        'get_blacklist': "ritorna lo stato della blacklist (attivo / disattivo)",
+        'add_blackword': "aggiunge una blackword all'elenco di blackwords",
+        'rm_blackword': "rimuove una blackword dall'elenco di blackwords",
+        'clear_': "rimuove un numero dato di messaggi dal canale in cui il comando è stato evocato",
+        'clear': "rimuove tutti i messaggi nel canale in cui il comando è stato evocato",
+        'mute': "muta (testualmente) un utente per un certo periodo di tempo dato",
+        'unmute': "smuta (testualmente) un utente",
+        'unban': "sbanna un utente",
+        'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato"
     }
 
     # class constants
@@ -67,10 +89,6 @@ class Config:
     @classmethod
     def get_token(cls):
         return str(Config.__configs['Token'])
-
-    @classmethod
-    def get_max_prefix_len(cls):
-        return str(Config.__configs['MaxPrefixLen'])
 
     @classmethod
     def get_prefix(cls):
@@ -126,17 +144,8 @@ class Config:
             Config.__configs = None
             return False
 
-        # check if the max len imposed by the user isn't greater of the max len consented by the software
-        elif int(Config.get_max_prefix_len()) > Config.Max_Len_Prefix:
-            print(
-                f"{Colors.Red}\nERROR: {Colors.Reset}il limite massimo della lunghezza del prefisso che hai impostato, "
-                f"supera il limite massimo che il programma consente di impostare che equivale a: "
-                f"{Config.Max_Len_Prefix}"
-                )
-            return False
-
-        # check if the len of the prefix isn't grater then the len of max len prefix
-        elif len(Config.get_prefix()) > len(Config.get_max_prefix_len()):
+        # check if the len of the prefix isn't grater than 3
+        elif len(Config.get_prefix()) > Config.Max_Len_Prefix:
             print(f"{Colors.Red}\nERROR: {Colors.Reset}il tuo prefisso per il bot, è troppo lungo")
             return False
 

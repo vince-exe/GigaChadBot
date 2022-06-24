@@ -10,14 +10,22 @@ from saves.saves import Saves
 
 import discord
 
+import platform
+
+import asyncio
+
 
 if __name__ == '__main__':
+    # check if the platform is windows to change the event loop policy and avoid the RunTimeError
+    if platform.system() == 'Windows':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     # try to init the Config and Saves class
     if not (Config.init() and Saves.init()):
         exit(InitErrors.Reading_Settings_Error)
 
     # create a bot object that we are going to use to connect with Discord APIs
-    bot = commands.Bot(command_prefix=Config.get_prefix())
+    bot = commands.Bot(command_prefix=Config.get_prefix(), help_command=None)
 
     #   load the extensions of the bot
     bot.load_extension('bot.moderation.moderation_commands')
