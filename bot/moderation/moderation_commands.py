@@ -64,6 +64,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @has_guild_permissions(kick_members=True)
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -106,6 +107,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @has_guild_permissions(ban_members=True)
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -141,6 +143,7 @@ class Moderation(commands.Cog):
     # set the blacklist status based on the given mode, Mode = "on" BlackList = True vice versa False
     @has_guild_permissions(administrator=True)
     @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def set_blacklist(self, ctx, *, mode):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -177,6 +180,7 @@ class Moderation(commands.Cog):
     # return the embed with the blacklist status
     @has_guild_permissions(administrator=True)
     @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def get_blacklist(self, ctx):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -186,6 +190,7 @@ class Moderation(commands.Cog):
     # add the given black word to the black words list
     @has_guild_permissions(administrator=True)
     @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def add_blackword(self, ctx, *, black_word=None):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -210,6 +215,7 @@ class Moderation(commands.Cog):
     # remove the given black word from the black words list
     @has_guild_permissions(administrator=True)
     @commands.command()
+    @commands.cooldown(1, 3, commands.BucketType.user)
     async def rm_blackword(self, ctx, *, black_word):
         if not is_moderation_channel(ctx.channel.id):
             return
@@ -229,6 +235,7 @@ class Moderation(commands.Cog):
     # clear the chat based on the given number of message to clear
     @commands.command()
     @has_guild_permissions(manage_channels=True)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def clear_(self, ctx, limit_=None):
         if limit_ is not None and limit_ >= 1:
             await ctx.channel.purge(limit=int(limit_))
@@ -236,12 +243,14 @@ class Moderation(commands.Cog):
     # clear the All the chat
     @commands.command()
     @has_guild_permissions(manage_channels=True)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def clear(self, ctx):
         await ctx.channel.purge()
 
     # mute a user, (not the microphone)
     @has_guild_permissions(mute_members=True)
     @commands.command()
+    @commands.cooldown(1, 1, commands.BucketType.user)
     async def mute(self, ctx, member: discord.Member, time=None, unit=None, *, reason=None):
         try:
             if reason is None or time is None or unit is None:
@@ -296,6 +305,7 @@ class Moderation(commands.Cog):
     # unmute a user
     @has_guild_permissions(mute_members=True)
     @commands.command()
+    @commands.cooldown(1, 1, commands.BucketType.user)
     async def unmute(self, ctx, member: discord.Member):
         role = ctx.guild.get_role(self.mute_role_id)
 
@@ -317,6 +327,7 @@ class Moderation(commands.Cog):
     # unban a user
     @has_guild_permissions(ban_members=True)
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
 
@@ -339,6 +350,7 @@ class Moderation(commands.Cog):
     # return the complete banned users list
     @has_guild_permissions(ban_members=True)
     @commands.command()
+    @commands.cooldown(1, 8, commands.BucketType.user)
     async def banlist(self, ctx):
         banned_list = await ctx.guild.bans()
 

@@ -16,6 +16,7 @@ class Interaction(commands.Cog):
         print(f'\n{Colors.Green}--> {Colors.Reset}Interaction commands ready')
 
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def hello(self, ctx):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -24,6 +25,7 @@ class Interaction(commands.Cog):
         await ctx.send(f'Ciao {author[0:len(author) - 5]}')
 
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def repeat(self, ctx, message=None):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -35,6 +37,7 @@ class Interaction(commands.Cog):
 
     # return the info about a user
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def whois(self, ctx, member: discord.Member):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -47,6 +50,7 @@ class Interaction(commands.Cog):
 
     # take the id of a channel and return the channel name
     @commands.command()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def chinfo(self, ctx, *, channel_id=None):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -58,6 +62,7 @@ class Interaction(commands.Cog):
 
     # send the black list to the message author
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def blackwords(self, ctx):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -72,6 +77,7 @@ class Interaction(commands.Cog):
 
     # send the citation list to the message author
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def citations(self, ctx):
         if not is_interaction_channel(ctx.channel.id):
             return
@@ -84,6 +90,7 @@ class Interaction(commands.Cog):
             return
 
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def citation(self, ctx, *, command=None):
         # return the list of all the commands
         if command is None:
@@ -92,6 +99,7 @@ class Interaction(commands.Cog):
         # return the description of a specific command
 
     @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
     async def help(self, ctx, *, command=None):
         # print the complete commands list
         if command is None:

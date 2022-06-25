@@ -59,7 +59,7 @@ class Config:
         'mute': "muta (testualmente) un utente per un certo periodo di tempo dato",
         'unmute': "smuta (testualmente) un utente",
         'unban': "sbanna un utente",
-        'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato"
+        'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato",
     }
 
     # class constants
