@@ -41,4 +41,26 @@
 #### <p align="center"> 💥 [ mute ] Muta ( testualmente ) un utente per un certo periodo di tempo dato ( s / m / h / d )</p>
 #### <p align="center"> 💢 [ unmute ] Smuta ( testualmente ) un utente ( tramite Id oppure @menzione) </p>
 #### <p align="center"> 💥 [ unban ] Sbanna un utente ( tramite nome#1234 )</p>
-#### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p>
+#### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p><br>
+
+
+# <p align="center">🚨 Permessi Comandi 🚨</p>
+#### <p align="center"> 🔖 [ hello ]  - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ repeat ] - - - [ Nessuno ]</p>
+#### <p align="center"> 🔖 [ whois ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ chinfo ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🔖 [ blackwords] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ citations ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🔖 [ citation ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ kick ] - - -  [ Espellere Utenti ]</p>
+#### <p align="center"> 🔖 [ ban ] - - -  [ Bannare Utenti ]</p>
+#### <p align="center"> 🏷️ [ set_blacklist ] - - -  [ Amministratore ]</p>
+#### <p align="center"> 🔖 [ get_blacklist ] - - -  [ Amministratore ]</p>
+#### <p align="center"> 🏷️ [ add_blackword ] - - -  [ Amministratore ]</p>
+#### <p align="center"> 🔖 [ rm_blackword ] - - -  [ Amministratore ]</p>
+#### <p align="center"> 🏷️ [ clear_ ] - - -  [ Gestione Canale ]</p>
+#### <p align="center"> 🔖 [ clear ] - - -  [ Gestione Canale ]</p>
+#### <p align="center"> 🏷️ [ mute ] - - -  [ Mutare Utenti ]</p>
+#### <p align="center"> 🔖 [ unmute ] - - -  [ Mutare Utenti ]</p>
+#### <p align="center"> 🏷️ [ unban ] - - -  [ Bannare Utenti ]</p>
+#### <p align="center"> 🔖 [ banlist ] - - -  [ Bannare Utenti ]</p><br>
