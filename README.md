@@ -7,8 +7,13 @@
 # <p align="center">🐸 Requirements 🐸</p>
 #### <p align="center">-> 🐍 Python 🐍 <- </p>
 #### <p align="center">-> 🤖 Discord.py  module 🤖 <- </p>
-#### <p align="center">-> ✂️ Discord ✂️ <- </p><br>
+#### <p align="center">-> ✂️ Discord ✂️ <- </p>
+#### <p align="center">-> 🔗 Discord Developer Mode 🔗 <- </p><br>
   
+  
+# <p align="center">👨‍💻 Attivare La Modalità Sviluppatore 👨‍💻</p>
+<p align="center"> [ https://technoglitz.com/italy/come-abilitare-o-disabilitare-la-modalita-sviluppatore-su-discord/ ] </p><br>
+
 # <p align="center">💻 Installation [ 1.0 ] 💻</p>
 #### <p align="center">✔️ Puoi usare: git clone [ https://github.com/vince-exe/EasyChat ] per clonare la repository ed utilizzare il file .zip</p><br>
  
@@ -69,4 +74,17 @@
 #### <p align="center"> 🔖 [ unmute ] - - -  [ Mutare Utenti ]</p>
 #### <p align="center"> 🏷️ [ unban ] - - -  [ Bannare Utenti ]</p>
 #### <p align="center"> 🔖 [ banlist ] - - -  [ Bannare Utenti ]</p>
-#### <p align="center"> 🏷️ [ help ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ help ] - - -  [ Nessuno ]</p><br>
+ 
+# <p align="center">💾 File Configurazione 💾</p>
+#### <p align="center"> 🦄 [ Token ] Il proprio token personale da inserire, indispensabile per il funzionamento del bot</p>
+#### <p align="center"> 🦓 [ Prefix ] Il prefisso che precederà qualsiasi comando</p>
+#### <p align="center"> 🦄 [ LogChannel ] L'id del canale di log, dove il bot manderà i messaggi di log</p>
+#### <p align="center"> 🦓 [ FailLogChannel ] L'id del canale dove il bot manderà i messaggi di log andati male</p>
+#### <p align="center"> 🦄 [ SpamLogChannel ] L'id del canale dove il bot manderà i messaggi di log di minore importanza e ripetitivi</p>
+#### <p align="center"> 🦓 [ InfoBanKick ] Il messaggio che si vuole far vedere all'utente quando viene espulso / bannato</p>
+#### <p align="center"> 🦄 [ RolesOutBlackWordCheck ] L'id dei ruoli che saranno esclusi dal controllo sulle blackwords</p>
+#### <p align="center"> 🦓 [ MaxMessageLen ] La massima lunghezza che un messaggio può raggiungere, se viene sforata il bot eliminerà il messaggio</p>
+#### <p align="center"> 🦄 [ ModerationChannles ] L'id del canale / canali dove possono essere eseguiti i comandi di moderazione</p>
+#### <p align="center"> 🦓 [ InteractionChannels ] L'id del canale / canali dove possono essere eseguiti i comandi di interazione</p>
+#### <p align="center"> 🦄 [ MuteRole ] L'id del ruolo che verrà attribbuito all'utente quando viene eseguito il comando "mute", assicurarsi che con il ruolo dato l'utente non possa scrivere</p>
