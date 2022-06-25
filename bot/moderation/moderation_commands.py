@@ -175,7 +175,7 @@ class Moderation(commands.Cog):
             self.black_list_status = False
 
     # return the embed with the blacklist status
-    @has_guild_permissions(mute_members=True)
+    @has_guild_permissions(administrator=True)
     @commands.command()
     async def get_blacklist(self, ctx):
         if not is_moderation_channel(ctx.channel.id):
