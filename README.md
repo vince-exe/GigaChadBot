@@ -42,7 +42,8 @@
 #### <p align="center"> 💢 [ unmute ] Smuta ( testualmente ) un utente ( tramite Id oppure @menzione) </p>
 #### <p align="center"> 💥 [ unban ] Sbanna un utente ( tramite nome#1234 )</p>
 #### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p><br>
-
+#### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p><br>
+#### <p align="center"> 💢 [ help ] Manda la lista dei comandi con le loro descrizioni, oppure se accompagnato dal nome di un comando, manda la sua descrizione</p><br>
 
 # <p align="center">🚨 Permessi Comandi 🚨</p>
 #### <p align="center"> 🔖 [ hello ]  - - -  [ Nessuno ]</p>
@@ -63,4 +64,5 @@
 #### <p align="center"> 🏷️ [ mute ] - - -  [ Mutare Utenti ]</p>
 #### <p align="center"> 🔖 [ unmute ] - - -  [ Mutare Utenti ]</p>
 #### <p align="center"> 🏷️ [ unban ] - - -  [ Bannare Utenti ]</p>
-#### <p align="center"> 🔖 [ banlist ] - - -  [ Bannare Utenti ]</p><br>
+#### <p align="center"> 🔖 [ banlist ] - - -  [ Bannare Utenti ]</p>
+#### <p align="center"> 🏷️ [ help ] - - -  [ Nessuno ]</p>
