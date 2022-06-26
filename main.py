@@ -15,7 +15,7 @@ import platform
 import asyncio
 
 
-if __name__ == '__main__':
+def main():
     # check if the platform is windows to change the event loop policy and avoid the RunTimeError
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -50,3 +50,7 @@ if __name__ == '__main__':
 
     # save all the changes
     Saves.save_all()
+
+
+if __name__ == '__main__':
+    main()

@@ -60,6 +60,8 @@ class Config:
         'unmute': "smuta (testualmente) un utente",
         'unban': "sbanna un utente",
         'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato",
+        'random': "genera un numero casuale tra i due numeri che gli vengono passati",
+        'hot': "simulazione del gioco testa o croce"
     }
 
     # class constants

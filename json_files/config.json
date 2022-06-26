@@ -3,29 +3,27 @@
 
     "Prefix": "?",
 
-    "LogChannel": 986245756853821530,
+    "LogChannel": 0,
 
-    "FailLogChannel": 986342185148502026,
+    "FailLogChannel": 0,
 
-    "SpamLogChannel": 986393413660344360,
+    "SpamLogChannel": 0,
 
-    "InfoBanKick": "contatta lo staff per maggiori informazioni",
+    "InfoBanKick": "#",
 
     "RolesOutBlackWordCheck": [
-        984553100822077470
+        0
     ],
 
-    "MaxMessageLen": 1000   ,
+    "MaxMessageLen": 300,
 
     "ModerationChannels": [
-        987716352619978762,
-        984439845696995378
+        0
     ],
 
     "InteractionChannels": [
-        987853201627832390,
-        984439845696995378
+        0
     ],
 
-    "MuteRole": 989131712636280893
+    "MuteRole": 0
 }

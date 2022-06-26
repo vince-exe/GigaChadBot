@@ -4,7 +4,9 @@ from utils.utils import Colors
 
 from bot.interaction.interaction_utilities import *
 
-from discord.ext.commands import has_guild_permissions
+from sys import maxsize
+
+from random import randint, seed
 
 
 class Interaction(commands.Cog):
@@ -91,24 +93,60 @@ class Interaction(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 2, commands.BucketType.user)
-    async def citation(self, ctx, *, command=None):
-        # return the list of all the commands
-        if command is None:
-            pass
+    async def citation(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
 
-        # return the description of a specific command
+        await ctx.channel.send(embed=get_citation_embed())
 
+    # return the description of a specific command or the commands list
     @commands.command()
     @commands.cooldown(1, 2, commands.BucketType.user)
     async def help(self, ctx, *, command=None):
-        # print the complete commands list
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        # send the commands list to the message author
         if command is None:
-            return await ctx.channel.send(embed=get_commands_list_embed(ctx))
+            return await ctx.author.send(embed=get_commands_list_embed(ctx))
 
         # check if the command that he searched is present in the commands list
         if command in Config.commands_list.keys():
             return await ctx.channel.send(embed=get_specific_command_embed(ctx, (command,
                                                                                  Config.commands_list.get(command))))
+
+    # return a casual number between the given numbers
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def random(self, ctx, min_: int, max_: int):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        # check if the numbers aren't too big or short
+        if min_ < -(maxsize - 1) or max_ > maxsize:
+            return await ctx.channel.send('I numeri sono troppo grandi / piccoli')
+
+        # check if the min is greater than the max, and if so switch min and max
+        if min_ > max_:
+            tmp = max_
+            max_ = min_
+            min_ = tmp
+
+        return await ctx.channel.send(f'{randint(min_, max_)}')
+
+    # abbreviation of head or tails
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def hot(self, ctx):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        seed(randint(0, 999999))
+        # 0 = head || 1 = tails
+        if randint(0, 1):
+            return await ctx.channel.send('É uscita testa')
+
+        return await ctx.channel.send('É uscita croce')
 
 
 def setup(bot):

@@ -41,7 +41,7 @@ class Moderation(commands.Cog):
                 return
 
             # if the message is longer than the Max Message Len
-            if len(message.content) > Config.get_max_message_len():
+            if len(message.content) > Config.get_max_message_len() and not message.content.startswith('?help'):
                 await message.delete()
                 return
 
