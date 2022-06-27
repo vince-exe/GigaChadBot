@@ -61,7 +61,8 @@ class Config:
         'unban': "sbanna un utente",
         'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato",
         'random': "genera un numero casuale tra i due numeri che gli vengono passati",
-        'hot': "simulazione del gioco testa o croce"
+        'hot': "simulazione del gioco testa o croce",
+        'warn': "avvisa un utente per un suo comportamento, dopo un tot numeri di worn l'utente verrà sanzionato"
     }
 
     # class constants

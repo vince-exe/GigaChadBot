@@ -252,6 +252,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def mute(self, ctx, member: discord.Member, time=None, unit=None, *, reason=None):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         try:
             if reason is None or time is None or unit is None:
                 return
@@ -307,6 +310,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 1, commands.BucketType.user)
     async def unmute(self, ctx, member: discord.Member):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         role = ctx.guild.get_role(self.mute_role_id)
 
         if role is None:
@@ -329,6 +335,9 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 2, commands.BucketType.user)
     async def unban(self, ctx, *, member):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         banned_users = await ctx.guild.bans()
 
         member_name, member_discriminator = member.split('#')
@@ -341,7 +350,7 @@ class Moderation(commands.Cog):
 
                 log_channel = ctx.guild.get_channel(self.log_channel_id)
                 if log_channel is None:
-                    print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di log channel non esiste, inserisci un id '
+                    print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di log non esiste, inserisci un id '
                           f'corretto nel file di configurazione')
                     return
 
@@ -350,8 +359,11 @@ class Moderation(commands.Cog):
     # return the complete banned users list
     @has_guild_permissions(ban_members=True)
     @commands.command()
-    @commands.cooldown(1, 8, commands.BucketType.user)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def banlist(self, ctx):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
         banned_list = await ctx.guild.bans()
 
         # if the list is empty, send the message to warn the admin that the list is empty
@@ -359,6 +371,38 @@ class Moderation(commands.Cog):
             return await ctx.channel.send(embed=get_empty_banned_list_embed())
 
         await ctx.channel.send(embed=get_banned_list_embed(ctx, banned_list))
+
+    # warn a user for a specific reason
+    @has_guild_permissions(kick_members=True)
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def warn(self, ctx, member: discord.Member, *, reason=None):
+        if not is_moderation_channel(ctx.channel.id) or reason is None:
+            return
+
+        try:
+            Saves.add_warning(member.id)
+
+            log_channel = ctx.guild.get_channel(self.log_channel_id)
+            if log_channel is None:
+                print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto nel '
+                      f'file di configurazione')
+                return
+
+            # send the warn message in the log channel
+            await log_channel.send(embed=get_warn_log__embed(ctx, str(member), reason))
+
+            await member.send(embed=get_warn_user_embed(ctx, member, reason))
+
+        except discord.HTTPException:
+            fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
+
+            if fail_channel is None:
+                print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
+                      f' nel file di configurazione')
+                return
+
+            return await fail_channel.send(embed=get_fail_word_embed(ctx, member, reason))
 
 
 def setup(bot):

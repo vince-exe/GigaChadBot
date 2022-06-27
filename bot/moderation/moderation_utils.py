@@ -4,6 +4,8 @@ from config.config import Config
 
 from utils.utils import Colors
 
+from saves.saves import Saves
+
 import discord
 
 
@@ -411,8 +413,62 @@ def get_empty_banned_list_embed():
     return embed
 
 
+# return the embed when the user get warned
+def get_warn_log__embed(ctx, member, reason):
+    embed = discord.Embed(title='Utente Warnato',
+                          description='uno staffer ha warnato un utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=ctx.author, inline=False)
+    embed.add_field(name='Motivazione', value=reason, inline=False)
+    embed.add_field(name='Utente', value=member, inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed to the warned user
+def get_warn_user_embed(ctx, member, reason):
+    embed = discord.Embed(title='Sei Stato Warnato',
+                          description='uno staffer ti ha warnato',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=ctx.author, inline=False)
+    embed.add_field(name='Motivazione', value=reason, inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Server', value=ctx.guild.name, inline=False)
+
+    return embed
+
+
+# return the embed when the bot could not send the message to the user
+def get_fail_word_embed(ctx, member, reason):
+    embed = discord.Embed(title='Tentativo Avviso Warn Utente',
+                          description="il bot ha tentato di mandare un messaggio di warn all'utente",
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=ctx.author, inline=False)
+    embed.add_field(name='Motivazione', value=reason, inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
 # check if the given role is excluded from the control on the black words
 def check_role(message):
+    roles_out_blacklist = Config.get_roles_out_blacklist()
+
+    if not len(roles_out_blacklist):
+        return False
+
     for role in message.author.roles:
         if role.id in Config.get_roles_out_blacklist():
             return True
@@ -422,6 +478,11 @@ def check_role(message):
 
 # check if the channel where the message has been written is a moderation channel
 def is_moderation_channel(channel_id):
+    moderation_channels = Config.get_moderation_channels()
+
+    if not len(moderation_channels):
+        return True
+
     for id_ in Config.get_moderation_channels():
         if id_ == channel_id:
             return True

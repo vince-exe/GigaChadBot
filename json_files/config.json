@@ -12,17 +12,17 @@
     "InfoBanKick": "#",
 
     "RolesOutBlackWordCheck": [
-        0
+
     ],
 
     "MaxMessageLen": 300,
 
     "ModerationChannels": [
-        0
+
     ],
 
     "InteractionChannels": [
-        0
+
     ],
 
     "MuteRole": 0

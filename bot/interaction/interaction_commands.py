@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 
 from utils.utils import Colors
@@ -147,6 +148,30 @@ class Interaction(commands.Cog):
             return await ctx.channel.send('É uscita testa')
 
         return await ctx.channel.send('É uscita croce')
+
+    # send the pic of the message author, or if a member has been @mentioned send the pic of the member
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def pic(self, ctx, member: discord.Member = None):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        if member is None:
+            return await ctx.channel.send(embed=get_profile_pic(ctx.author.avatar_url))
+
+        await ctx.channel.send(embed=get_profile_pic(member.avatar_url))
+
+    # return the number of warn of the tagged user, if no user is tagged than return the number of warn of the author
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def warnof(self, ctx, member: discord.Member = None):
+        if not is_interaction_channel(ctx.channel.id):
+            return
+
+        if member is None:
+            return await ctx.channel.send(embed=get_warn_number(str(ctx.author), ctx.author.id,ctx.author.avatar_url))
+
+        return await ctx.channel.send(embed=get_warn_number(str(member), member.id, member.avatar_url))
 
 
 def setup(bot):

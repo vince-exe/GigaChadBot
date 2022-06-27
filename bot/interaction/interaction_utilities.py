@@ -117,8 +117,41 @@ def get_specific_command_embed(ctx, command):
     return embed
 
 
+# return the number of warn of the user
+def get_warn_number(user, user_id, avatar_url):
+    embed = discord.Embed(title='Numero di Warn',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=avatar_url)
+
+    embed.add_field(name='Utente', value=user, inline=False)
+    n_warn = Saves.get_user_warn(user_id)
+
+    if not n_warn:
+        embed.add_field(name='Warn Totali', value='Nessuno', inline=False)
+
+    else:
+        embed.add_field(name='Warn Totali', value=str(n_warn), inline=False)
+
+    return embed
+
+
+# return the embed that contain a profile picture
+def get_profile_pic(avatar_url):
+    embed = discord.Embed(title='Pic Utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_image(url=avatar_url)
+    return embed
+
+
 def is_interaction_channel(channel_id):
-    for id_ in Config.get_interaction_channels():
+    interaction_channels = Config.get_interaction_channels()
+
+    if not len(interaction_channels):
+        return True
+
+    for id_ in interaction_channels:
         if id_ == channel_id:
             return True
 
