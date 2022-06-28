@@ -499,6 +499,37 @@ def get_log_max_warnings_embed(ctx, member):
     return embed
 
 
+# can't remove warning
+def get_cant_remove_warning_embed(ctx, member):
+    embed = discord.Embed(title='Tentativo Rimozione Warning',
+                          description='Uno staffer ha tentato di rimuovere un warning ad un utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Motivazione', value="L'utente non ha warnings", inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed when a staffer remove a warning from a user
+def get_rm_warning_embed(ctx, member):
+    embed = discord.Embed(title='Warning Rimosso',
+                          description='uno staffer ha rimosso un warning da un utente',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
 # check if the given role is excluded from the control on the black words
 def check_role(message):
     roles_out_blacklist = Config.get_roles_out_blacklist()

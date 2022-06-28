@@ -436,17 +436,27 @@ class Moderation(commands.Cog):
         if not is_moderation_channel(ctx.channel.id) or member is None:
             return
 
+        # can't remove the warning from the user because he has no warnings
         match Saves.rm_warn_from_user(member.id):
-            # user not found
-            case -1:
-                pass
-
-            # can't remove the warning from the user
             case -2:
-                pass
+                fail_log_channel = ctx.guild.get_channel(self.fail_log_channel_id)
+                if fail_log_channel is None:
+                    print(
+                        f'{Colors.Red}\nERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
+                        f' nel file di configurazione')
+                    return
+
+                return await fail_log_channel.send(embed=get_cant_remove_warning_embed(ctx, member))
 
             # successfully removed the warning from the user
             case 0:
+                spam_channel = ctx.guild.get_channel(self.spam_log_channel_id)
+                if spam_channel is None:
+                    print(f"{Colors.Red}\nERROR: {Colors.Reset}il canale di spam log non esiste, inserisci un id"
+                          f" corretto nel file di configurazione")
+                    return
+
+                return await spam_channel.send(embed=get_rm_warning_embed(ctx, member))
                 pass
 
 

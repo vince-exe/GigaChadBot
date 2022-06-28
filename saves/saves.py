@@ -191,6 +191,11 @@ class Saves:
         Saves.__warned_users_saves = True
         return 0
 
+    # remove the users with 0 warnings from the list
+    @classmethod
+    def check_warned_list(cls):
+        Saves.__warned_users_list = [user for user in Saves.__warned_users_list if user[1] != 0]
+
     # saves all the new modify to the json files
     @classmethod
     def save_all(cls):
@@ -206,6 +211,9 @@ class Saves:
 
             # if there are new modify in the warned users list
             if Saves.__warned_users_saves:
+                # check for users with 0 warnings
+                Saves.check_warned_list()
+
                 Saves.__warned_users_json['UsersList'] = Saves.__warned_users_list
 
                 with open(Saves.__warned_users_path, 'w') as file:
