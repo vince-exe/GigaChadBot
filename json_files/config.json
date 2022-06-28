@@ -25,5 +25,7 @@
 
     ],
 
-    "MuteRole": 0
+    "MuteRole": 0,
+
+    "KickAfterWarns": 0
 }

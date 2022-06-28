@@ -36,7 +36,8 @@ class Config:
         'MaxMessageLen': None,
         'ModerationChannels': None,
         'InteractionChannels': None,
-        'MuteRole': None
+        'MuteRole': None,
+        'KickAfterWarns': None
     }
 
     # this dictionary contains all the commands name and their descriptions
@@ -62,7 +63,9 @@ class Config:
         'banlist': "manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato",
         'random': "genera un numero casuale tra i due numeri che gli vengono passati",
         'hot': "simulazione del gioco testa o croce",
-        'warn': "avvisa un utente per un suo comportamento, dopo un tot numeri di worn l'utente verrà sanzionato"
+        'warn': "avvisa un utente per un suo comportamento, dopo un tot numeri di worn l'utente verrà sanzionato",
+        'pic': "ritorna la pic di un utente taggato",
+        'warnof': "ritorna il numero di warn di uno specifico utente taggato"
     }
 
     # class constants
@@ -133,6 +136,10 @@ class Config:
     def get_mute_role(cls):
         return Config.__configs['MuteRole']
 
+    @classmethod
+    def get_kick_after_warns(cls):
+        return Config.__configs['KickAfterWarns']
+
     # main method, used to [inizialize] the class
     @classmethod
     def init(cls):
@@ -157,6 +164,12 @@ class Config:
             print(
                 f"{Colors.Red}\nERROR: {Colors.Reset}la lunghezza della info/ban supera quella che il programma consente"
                 f"che equivale a: {Config.Max_Info_Len}")
+            return False
+
+        # check the option KickAfterWarns
+        elif Config.get_kick_after_warns() <= 0:
+            print(f"{Colors.Red}\nERROR: {Colors.Reset}non puoi settare un numero uguale o minore di zero nell'opzione"
+                  f" 'KickAfterWarns'")
             return False
 
         # the json file passed all the cases

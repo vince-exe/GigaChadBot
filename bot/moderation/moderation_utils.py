@@ -462,6 +462,43 @@ def get_fail_word_embed(ctx, member, reason):
     return embed
 
 
+# return the embed when a user reach the max number of warnings in the server
+def get_max_warnings_embed(ctx, member):
+    embed = discord.Embed(title='Sei Stato Espulso',
+                          description=f'sei stato espulso dal server {ctx.guild.name}',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Motivazione', value='Numero massimo di warnings raggiunti', inline=False)
+    embed.add_field(name='Tuoi Warnings', value=str(Saves.get_user_warn(member.id)), inline=False)
+    embed.add_field(name='Consentiti Dal Server', value=str(Config.get_kick_after_warns()), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+    embed.add_field(name='Info Kick', value=str(Config.get_info_ban_kick()), inline=False)
+
+    return embed
+
+
+# return the embed in the log channel when a user reach the max num of warnings
+def get_log_max_warnings_embed(ctx, member):
+    embed = discord.Embed(title='Utente Espulso',
+                          description=f'un utente è stato espulso dal server',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
+    embed.add_field(name='Utente', value=str(member), inline=False)
+    embed.add_field(name='Motivazione', value='Numero massimo di warnings raggiunti', inline=False)
+    embed.add_field(name='Warnings Utente', value=str(Saves.get_user_warn(member.id)), inline=False)
+    embed.add_field(name='Consentiti Dal Server', value=str(Config.get_kick_after_warns()), inline=False)
+    embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
 # check if the given role is excluded from the control on the black words
 def check_role(message):
     roles_out_blacklist = Config.get_roles_out_blacklist()

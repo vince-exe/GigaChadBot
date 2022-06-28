@@ -38,9 +38,13 @@ def get_citations_embed(ctx):
 
 
 #  return the embed that contains all the information about a user
-def get_whois_embed(member, role):
+def get_whois_embed(member):
     embed = discord.Embed(title="Informazioni Utente",
                           color=discord.Color.dark_purple())
+
+    role = str(member.top_role)
+    if not role.startswith('@'):
+        role = '@' + role
 
     # set the user info
     fields = [("Nome", str(member), True),

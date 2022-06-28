@@ -45,11 +45,7 @@ class Interaction(commands.Cog):
         if not is_interaction_channel(ctx.channel.id):
             return
 
-        role = str(member.top_role)
-        if not role.startswith('@'):
-            role = '@' + role
-
-        await ctx.send(embed=get_whois_embed(member, role))
+        return await ctx.send(embed=get_whois_embed(member))
 
     # take the id of a channel and return the channel name
     @commands.command()

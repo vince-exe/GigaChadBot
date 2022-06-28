@@ -164,6 +164,33 @@ class Saves:
         Saves.__warned_users_saves = True
         return
 
+    # remove a user from the warned list
+    @classmethod
+    def rm_warned_user(cls, id_):
+        index = Saves.check_user(id_)
+        warned_list = Saves.get_warned_users()
+
+        del warned_list[index]
+        Saves.__warned_users_saves = True
+        return
+
+    # remove a warning from a user
+    @classmethod
+    def rm_warn_from_user(cls, id_):
+        index = Saves.check_user(id_)
+        warned_list = Saves.get_warned_users()
+
+        # if the user doesn't exist
+        if index == -1:
+            return -1
+
+        if (warned_list[index][1] - 1) < 0:
+            return -2
+
+        warned_list[index][1] -= 1
+        Saves.__warned_users_saves = True
+        return 0
+
     # saves all the new modify to the json files
     @classmethod
     def save_all(cls):

@@ -41,7 +41,7 @@ class Moderation(commands.Cog):
                 return
 
             # if the message is longer than the Max Message Len
-            if len(message.content) > Config.get_max_message_len() and not message.content.startswith('?help'):
+            if len(message.content) > Config.get_max_message_len():
                 await message.delete()
                 return
 
@@ -379,23 +379,47 @@ class Moderation(commands.Cog):
     async def warn(self, ctx, member: discord.Member, *, reason=None):
         if not is_moderation_channel(ctx.channel.id) or reason is None:
             return
-
+        too_warns = False
         try:
             Saves.add_warning(member.id)
+
+            # if the num of warnings exceeds the  'KickAfterWarns' option, then kick the user
+            if Saves.get_user_warn(member.id) > Config.get_kick_after_warns():
+                too_warns = True
 
             log_channel = ctx.guild.get_channel(self.log_channel_id)
             if log_channel is None:
                 print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto nel '
                       f'file di configurazione')
-                return
 
-            # send the warn message in the log channel
-            await log_channel.send(embed=get_warn_log__embed(ctx, str(member), reason))
+            # send a normal warning message to the user and in the log channel
+            if not too_warns:
+                if log_channel is not None:
+                    # send the warning message in the log channel
+                    await log_channel.send(embed=get_warn_log__embed(ctx, str(member), reason))
 
-            await member.send(embed=get_warn_user_embed(ctx, member, reason))
+                await member.send(embed=get_warn_user_embed(ctx, member, reason))
+
+            # warn the user that he has been kicked because he reached the max number of warnings
+            else:
+                if log_channel is not None:
+                    await log_channel.send(embed=get_log_max_warnings_embed(ctx, member))
+
+                # send the message to the user
+                await member.send(embed=get_max_warnings_embed(ctx, member))
+
+                # remove the user from the warned list, because we are going to kick it
+                Saves.rm_warned_user(member.id)
+
+                # kick the user from the server
+                await ctx.guild.kick(member)
 
         except discord.HTTPException:
             fail_channel = ctx.guild.get_channel(self.fail_log_channel_id)
+
+            if too_warns:
+                Saves.rm_warned_user(member.id)
+                await ctx.guild.kick(member)
 
             if fail_channel is None:
                 print(f'{Colors.Red}\nERROR: {Colors.Reset}il canale di fail log non esiste, inserisci un id corretto'
@@ -403,6 +427,27 @@ class Moderation(commands.Cog):
                 return
 
             return await fail_channel.send(embed=get_fail_word_embed(ctx, member, reason))
+
+    # remove a warning from a user
+    @has_guild_permissions(kick_members=True)
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def rm_warning(self, ctx, member: discord.Member = None):
+        if not is_moderation_channel(ctx.channel.id) or member is None:
+            return
+
+        match Saves.rm_warn_from_user(member.id):
+            # user not found
+            case -1:
+                pass
+
+            # can't remove the warning from the user
+            case -2:
+                pass
+
+            # successfully removed the warning from the user
+            case 0:
+                pass
 
 
 def setup(bot):
