@@ -65,7 +65,8 @@ class Config:
         'hot': "simulazione del gioco testa o croce",
         'warn': "avvisa un utente per un suo comportamento, dopo un tot numeri di worn l'utente verrà sanzionato",
         'pic': "ritorna la pic di un utente taggato",
-        'warnof': "ritorna il numero di warn di uno specifico utente taggato"
+        'warnof': "ritorna il numero di warn di uno specifico utente taggato",
+        'warned_users': "ritorna la lista degli utenti warnati nel server"
     }
 
     # class constants

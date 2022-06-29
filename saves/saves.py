@@ -152,6 +152,7 @@ class Saves:
     def add_warning(cls, id_):
         index = Saves.check_user(id_)
         warned_list = Saves.get_warned_users()
+
         # if it's the first warning
         if index == -1:
             # append his nickname and his warning

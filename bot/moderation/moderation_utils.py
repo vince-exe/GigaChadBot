@@ -12,7 +12,7 @@ import discord
 async def send_black_word_embed(message, log_channels):
     try:
         # try to send the embed message to the user
-        await message.author.send(embed=get_black_word_user_embed(message))
+        await message.author.send(embed=black_word_user_embed(message))
 
         # get the spam log channel
         channel = message.guild.get_channel(log_channels[0])
@@ -23,7 +23,7 @@ async def send_black_word_embed(message, log_channels):
                   f' nel file di configurazione')
             return
 
-        await channel.send(embed=get_black_word_log_embed(message))
+        await channel.send(embed=black_word_log_embed(message))
 
     # send the embed to the fail log channel
     except discord.HTTPException:
@@ -37,11 +37,11 @@ async def send_black_word_embed(message, log_channels):
             return
 
         # if the channel exist, send the fail log message, into the channel
-        await channel.send(embed=get_black_word_failed_embed(message))
+        await channel.send(embed=black_word_failed_embed(message))
 
 
 # return the embed to send to the user, that worn he of the use of a black word
-def get_black_word_user_embed(message):
+def black_word_user_embed(message):
     embed = discord.Embed(title='Black Word',
                           description=f"Il bot ha segnalato allo staff l'utilizzo di una black word"
                                       f" da parte tua nel server digita {Config.get_prefix()}blackwords per avere"
@@ -58,7 +58,7 @@ def get_black_word_user_embed(message):
 
 
 # return the embed to send in the spam log channel
-def get_black_word_log_embed(message):
+def black_word_log_embed(message):
     embed = discord.Embed(title='Black Word',
                           description=f'un utente ha utilizzato una black word',
                           color=discord.Color.dark_purple())
@@ -73,7 +73,7 @@ def get_black_word_log_embed(message):
 
 
 # return the embed to send to the user, if he got banned
-def get_ban_embed(ctx, reason):
+def ban_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
                           description=f'sei stato bannato dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple(),
@@ -88,7 +88,7 @@ def get_ban_embed(ctx, reason):
 
 
 # return the embed to send in the fail log channel when the bot try to warn a user that used a black word
-def get_black_word_failed_embed(message):
+def black_word_failed_embed(message):
     embed = discord.Embed(title='Tentativo di Messaggio',
                           description=f"non ho potuto mandare il messaggio di warning per utilizzo di una"
                                       f" black word ad un utente")
@@ -103,7 +103,7 @@ def get_black_word_failed_embed(message):
 
 
 # return the Kick Embed to send to the user
-def get_kick_embed(ctx, reason):
+def kick_embed(ctx, reason):
     embed = discord.Embed(title='Messaggio dal Server',
                           description=f'sei stato espulso dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple(),
@@ -118,7 +118,7 @@ def get_kick_embed(ctx, reason):
 
 
 # return the Kick Embed to send in the log channel
-def get_kick_log_embed(ctx, member, reason):
+def kick_log_embed(ctx, member, reason):
     embed = discord.Embed(title='Utente Espulso',
                           description=f'Un utente è stato espulso dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple())
@@ -132,7 +132,7 @@ def get_kick_log_embed(ctx, member, reason):
 
 
 # return the Ban Embed to send in the log channel
-def get_ban_log_embed(ctx, member, reason):
+def ban_log_embed(ctx, member, reason):
     embed = discord.Embed(title='Utente Bannato',
                           description=f'Un utente è stato bannato dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple())
@@ -146,7 +146,7 @@ def get_ban_log_embed(ctx, member, reason):
 
 
 # return the Fail Log Kick Embed
-def get_kick_failed_embed(ctx, member):
+def kick_failed_embed(ctx, member):
     embed = discord.Embed(title='Tentativo di Messaggio',
                           description="Non ho potuto mandare il messaggio di kick all'utente",
                           color=discord.Color.dark_purple())
@@ -159,7 +159,7 @@ def get_kick_failed_embed(ctx, member):
 
 
 # return the Fail Log Ban Embed
-def get_ban_failed_embed(ctx, member):
+def ban_failed_embed(ctx, member):
     embed = discord.Embed(title='Tentativo di Messaggio',
                           description="Non ho potuto mandare il messaggio di ban all'utente",
                           color=discord.Color.dark_purple())
@@ -172,7 +172,7 @@ def get_ban_failed_embed(ctx, member):
 
 
 # return the blacklist status
-def get_blacklist_status_embed(blacklist_status):
+def blacklist_status_embed(blacklist_status):
     embed = discord.Embed(title='Stato BlackList',
                           color=discord.Color.dark_purple())
 
@@ -187,7 +187,7 @@ def get_blacklist_status_embed(blacklist_status):
 
 
 # return the embed when a user change the blacklist status
-def get_blacklist_changed_embed(blacklist_status_before, ctx):
+def blacklist_changed_embed(blacklist_status_before, ctx):
     embed = discord.Embed(title='BlackList Status Modificato',
                           description='uno staffer ha modificato lo stato della blacklist',
                           color=discord.Color.dark_purple())
@@ -214,7 +214,7 @@ def get_blacklist_changed_embed(blacklist_status_before, ctx):
 
 
 # return the embed, when an administrator add a new black_word to the black_words_list
-def get_add_blacklist_word_embed(ctx, black_word: str):
+def add_blacklist_word_embed(ctx, black_word: str):
     embed = discord.Embed(title='Nuova Black Word',
                           description='un amministratore ha aggiunto una nuova parola bandita',
                           color=discord.Color.dark_purple())
@@ -285,7 +285,7 @@ def fail_removed_blackword_embed(ctx, black_word: str):
 
 
 # return the embed, when a user went muted
-def get_muted_log_embed(ctx, user, reason, muted_time):
+def muted_log_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Utente Mutato',
                           description='un utente è stato mutato da uno staffer',
                           color=discord.Color.dark_purple()
@@ -302,7 +302,7 @@ def get_muted_log_embed(ctx, user, reason, muted_time):
 
 
 # return the embed, when a staffer try to mute a user, but the command went wrong
-def get_fail_muted_embed(ctx, user, reason, muted_time):
+def fail_muted_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Tentativo Di Mute',
                           description='uno staffer ha tentato di mutare un utente',
                           color=discord.Color.dark_purple()
@@ -322,7 +322,7 @@ def get_fail_muted_embed(ctx, user, reason, muted_time):
 
 
 # return the embed that warn the user that he has been muted
-def get_muted_user_embed(ctx, user, reason, muted_time):
+def muted_user_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Sei Stato Mutato',
                           description='uno staffer ti ha mutato',
                           color=discord.Color.dark_purple()
@@ -341,7 +341,7 @@ def get_muted_user_embed(ctx, user, reason, muted_time):
 
 
 # return the embed when a user went unmuted (by time)
-def get_unmuted_log_embed(ctx, user, reason, muted_time):
+def unmuted_log_embed(ctx, user, reason, muted_time):
     embed = discord.Embed(title='Utente Smutato',
                           description="un utente è stato smutato",
                           color=discord.Color.dark_purple()
@@ -359,7 +359,7 @@ def get_unmuted_log_embed(ctx, user, reason, muted_time):
 
 
 # return the embed when an admin unmute a member with the ('Prefix'unmute) command (so not by time)
-def get_admin_unmute_embed(ctx, user):
+def admin_unmute_embed(ctx, user):
     embed = discord.Embed(title='Admin Ha Smutato Utente',
                           description=f'un admin ha usato il comando {Config.get_prefix()}unmute per smutare un utente',
                           color=discord.Color.dark_purple())
@@ -374,7 +374,7 @@ def get_admin_unmute_embed(ctx, user):
 
 
 # return the embed when a user get unbanned
-def get_unban_user_embed(ctx, member):
+def unban_user_embed(ctx, member):
     embed = discord.Embed(title='Utente Sbannato',
                           description='un admin ha sbannato un utente',
                           color=discord.Color.dark_purple())
@@ -389,7 +389,7 @@ def get_unban_user_embed(ctx, member):
 
 
 # return the embed of the complete banned users list
-def get_banned_list_embed(ctx, banned_list):
+def banned_list_embed(ctx, banned_list):
     embed = discord.Embed(title='Lista Utenti Bannati',
                           description='lista completi degli utenti bannati dal server',
                           color=discord.Color.dark_purple())
@@ -405,7 +405,7 @@ def get_banned_list_embed(ctx, banned_list):
 
 
 # return the embed when the banned list is empty
-def get_empty_banned_list_embed():
+def empty_banned_list_embed():
     embed = discord.Embed(title='Lista Utenti Bannati',
                           description='la lista degli utenti bannati è vuota',
                           color=discord.Color.dark_purple())
@@ -414,7 +414,7 @@ def get_empty_banned_list_embed():
 
 
 # return the embed when the user get warned
-def get_warn_log__embed(ctx, member, reason):
+def warn_log__embed(ctx, member, reason):
     embed = discord.Embed(title='Utente Warnato',
                           description='uno staffer ha warnato un utente',
                           color=discord.Color.dark_purple())
@@ -430,7 +430,7 @@ def get_warn_log__embed(ctx, member, reason):
 
 
 # return the embed to the warned user
-def get_warn_user_embed(ctx, member, reason):
+def warn_user_embed(ctx, member, reason):
     embed = discord.Embed(title='Sei Stato Warnato',
                           description='uno staffer ti ha warnato',
                           color=discord.Color.dark_purple())
@@ -447,7 +447,7 @@ def get_warn_user_embed(ctx, member, reason):
 
 
 # return the embed when the bot could not send the message to the user
-def get_fail_word_embed(ctx, member, reason):
+def fail_word_embed(ctx, member, reason):
     embed = discord.Embed(title='Tentativo Avviso Warn Utente',
                           description="il bot ha tentato di mandare un messaggio di warn all'utente",
                           color=discord.Color.dark_purple())
@@ -463,7 +463,7 @@ def get_fail_word_embed(ctx, member, reason):
 
 
 # return the embed when a user reach the max number of warnings in the server
-def get_max_warnings_embed(ctx, member):
+def max_warnings_embed(ctx, member):
     embed = discord.Embed(title='Sei Stato Espulso',
                           description=f'sei stato espulso dal server {ctx.guild.name}',
                           color=discord.Color.dark_purple())
@@ -482,7 +482,7 @@ def get_max_warnings_embed(ctx, member):
 
 
 # return the embed in the log channel when a user reach the max num of warnings
-def get_log_max_warnings_embed(ctx, member):
+def max_log_warnings_embed(ctx, member):
     embed = discord.Embed(title='Utente Espulso',
                           description=f'un utente è stato espulso dal server',
                           color=discord.Color.dark_purple())
@@ -500,7 +500,7 @@ def get_log_max_warnings_embed(ctx, member):
 
 
 # can't remove warning
-def get_cant_remove_warning_embed(ctx, member):
+def cant_remove_warning_embed(ctx, member):
     embed = discord.Embed(title='Tentativo Rimozione Warning',
                           description='Uno staffer ha tentato di rimuovere un warning ad un utente',
                           color=discord.Color.dark_purple())
@@ -516,7 +516,7 @@ def get_cant_remove_warning_embed(ctx, member):
 
 
 # return the embed when a staffer remove a warning from a user
-def get_rm_warning_embed(ctx, member):
+def rm_warning_embed(ctx, member):
     embed = discord.Embed(title='Warning Rimosso',
                           description='uno staffer ha rimosso un warning da un utente',
                           color=discord.Color.dark_purple())
@@ -526,6 +526,32 @@ def get_rm_warning_embed(ctx, member):
     embed.add_field(name='Staffer', value=str(ctx.author), inline=False)
     embed.add_field(name='Utente', value=str(member), inline=False)
     embed.add_field(name='Data Comando', value=get_date(), inline=False)
+
+    return embed
+
+
+# return the embed that contain the warned users list
+def warned_users_embed(ctx):
+    warned_users = Saves.get_warned_users()
+
+    embed = discord.Embed(title='Lista Utenti Warnati',
+                          description='lista completa degli utenti warnati nel server',
+                          color=discord.Color.dark_purple())
+
+    embed.set_thumbnail(url=ctx.author.avatar_url)
+
+    # if the list is empty
+    if not len(warned_users):
+        embed.add_field(name='Lista', value='Vuota', inline=False)
+        return embed
+
+    i = 0
+    for user in warned_users:
+        embed.add_field(name=f'# {i + 1}', value=f'Id {user[0]}', inline=False)
+        i += 1
+
+    embed.set_footer(text=f"Utilizza il comando {Config.get_prefix()}warnof 'id' oppure '@menzione' per scoprire il "
+                          f"numero di warnings di quell'utente")
 
     return embed
 

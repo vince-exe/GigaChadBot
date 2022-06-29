@@ -74,7 +74,7 @@ class Moderation(commands.Cog):
             if reason is not None:
                 # check if the user is not a bot
                 if not member.bot:
-                    await member.send(embed=get_kick_embed(ctx, reason))
+                    await member.send(embed=kick_embed(ctx, reason))
 
                 # get the log channel
                 channel = ctx.guild.get_channel(self.log_channel_id)
@@ -88,7 +88,7 @@ class Moderation(commands.Cog):
                     return
 
                 # send the embed log to the log channel
-                await channel.send(embed=get_kick_log_embed(ctx, member, reason))
+                await channel.send(embed=kick_log_embed(ctx, member, reason))
 
         except discord.HTTPException:
             # get the fail log channel
@@ -103,7 +103,7 @@ class Moderation(commands.Cog):
             # kick the user
             await ctx.guild.kick(member)
             # send the message to the fail log channel
-            await channel.send(embed=get_kick_failed_embed(ctx, member))
+            await channel.send(embed=kick_failed_embed(ctx, member))
 
     @commands.command()
     @has_guild_permissions(ban_members=True)
@@ -115,7 +115,7 @@ class Moderation(commands.Cog):
         try:
             if reason is not None:
                 if not member.bot:
-                    await member.send(embed=get_ban_embed(ctx, reason))
+                    await member.send(embed=ban_embed(ctx, reason))
 
                 channel = ctx.guild.get_channel(self.log_channel_id)
                 await ctx.guild.ban(member, reason=reason)
@@ -125,7 +125,7 @@ class Moderation(commands.Cog):
                           f" nel file di configurazione")
                     return
 
-                await channel.send(embed=get_ban_log_embed(ctx, member, reason))
+                await channel.send(embed=ban_log_embed(ctx, member, reason))
 
         except discord.HTTPException:
             channel = ctx.guild.get_channel(self.fail_log_channel_id)
@@ -138,7 +138,7 @@ class Moderation(commands.Cog):
                 return
 
             # send the embed message in the fail log channel
-            await channel.send(embed=get_ban_failed_embed(ctx, member))
+            await channel.send(embed=ban_failed_embed(ctx, member))
 
     # set the blacklist status based on the given mode, Mode = "on" BlackList = True vice versa False
     @has_guild_permissions(administrator=True)
@@ -159,7 +159,7 @@ class Moderation(commands.Cog):
             channel = ctx.guild.get_channel(self.log_channel_id)
 
             if channel is not None:
-                await channel.send(embed=get_blacklist_changed_embed(self.black_list_status, ctx))
+                await channel.send(embed=blacklist_changed_embed(self.black_list_status, ctx))
             else:
                 print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto'
                       f' nel file di configurazione')
@@ -170,7 +170,7 @@ class Moderation(commands.Cog):
             channel = ctx.guild.get_channel(self.log_channel_id)
 
             if channel is not None:
-                await channel.send(embed=get_blacklist_changed_embed(self.black_list_status, ctx))
+                await channel.send(embed=blacklist_changed_embed(self.black_list_status, ctx))
             else:
                 print(f'\n{Colors.Red}ERROR: {Colors.Reset}il canale di log non esiste, inserisci un id corretto'
                       f' nel file di configurazione')
@@ -185,7 +185,7 @@ class Moderation(commands.Cog):
         if not is_moderation_channel(ctx.channel.id):
             return
 
-        await ctx.channel.send(embed=get_blacklist_status_embed(self.black_list_status))
+        await ctx.channel.send(embed=blacklist_status_embed(self.black_list_status))
 
     # add the given black word to the black words list
     @has_guild_permissions(administrator=True)
@@ -207,7 +207,7 @@ class Moderation(commands.Cog):
                           f' nel file di configurazione')
                     return
 
-                await channel.send(embed=get_add_blacklist_word_embed(ctx, black_word))
+                await channel.send(embed=add_blacklist_word_embed(ctx, black_word))
             # if the black_word already exist
             else:
                 await channel.send(embed=black_word_already_exist_embed(ctx, black_word))
@@ -276,7 +276,7 @@ class Moderation(commands.Cog):
                           f' corretto nel file di configurazione')
 
                 else:
-                    await fail_channel.send(embed=get_fail_muted_embed(ctx, member, reason, f'{time}{unit}'))
+                    await fail_channel.send(embed=fail_muted_embed(ctx, member, reason, f'{time}{unit}'))
                 return
 
             # add the mute role to the user
@@ -289,15 +289,15 @@ class Moderation(commands.Cog):
                 return
 
             # send the muted log
-            await log_channel.send(embed=get_muted_log_embed(ctx, member, reason, f'{time}{unit}'))
+            await log_channel.send(embed=muted_log_embed(ctx, member, reason, f'{time}{unit}'))
             # send the muted message to the user
-            await member.send(embed=get_muted_user_embed(ctx, member, reason, f'{time}{unit}'))
+            await member.send(embed=muted_user_embed(ctx, member, reason, f'{time}{unit}'))
             # sleep the given amount of time
             await asyncio.sleep(calculate_sleep_time(unit, time))
             # remove the muted role
             await member.remove_roles(role)
             # send the unmuted log
-            await log_channel.send(embed=get_unmuted_log_embed(ctx, member, reason, f'{time}{unit}'))
+            await log_channel.send(embed=unmuted_log_embed(ctx, member, reason, f'{time}{unit}'))
 
         except ValueError:
             return
@@ -328,7 +328,7 @@ class Moderation(commands.Cog):
         # remove the unmuted role to the user
         await member.remove_roles(role)
         # send the log message un the log channel
-        await channel.send(embed=get_admin_unmute_embed(ctx, member))
+        await channel.send(embed=admin_unmute_embed(ctx, member))
 
     # unban a user
     @has_guild_permissions(ban_members=True)
@@ -354,7 +354,7 @@ class Moderation(commands.Cog):
                           f'corretto nel file di configurazione')
                     return
 
-                await log_channel.send(embed=get_unban_user_embed(ctx, member))
+                await log_channel.send(embed=unban_user_embed(ctx, member))
 
     # return the complete banned users list
     @has_guild_permissions(ban_members=True)
@@ -368,9 +368,9 @@ class Moderation(commands.Cog):
 
         # if the list is empty, send the message to warn the admin that the list is empty
         if not len(banned_list):
-            return await ctx.channel.send(embed=get_empty_banned_list_embed())
+            return await ctx.channel.send(embed=empty_banned_list_embed())
 
-        await ctx.channel.send(embed=get_banned_list_embed(ctx, banned_list))
+        await ctx.channel.send(embed=banned_list_embed(ctx, banned_list))
 
     # warn a user for a specific reason
     @has_guild_permissions(kick_members=True)
@@ -379,6 +379,7 @@ class Moderation(commands.Cog):
     async def warn(self, ctx, member: discord.Member, *, reason=None):
         if not is_moderation_channel(ctx.channel.id) or reason is None:
             return
+
         too_warns = False
         try:
             Saves.add_warning(member.id)
@@ -396,17 +397,17 @@ class Moderation(commands.Cog):
             if not too_warns:
                 if log_channel is not None:
                     # send the warning message in the log channel
-                    await log_channel.send(embed=get_warn_log__embed(ctx, str(member), reason))
+                    await log_channel.send(embed=warn_log__embed(ctx, str(member), reason))
 
-                await member.send(embed=get_warn_user_embed(ctx, member, reason))
+                await member.send(embed=warn_user_embed(ctx, member, reason))
 
             # warn the user that he has been kicked because he reached the max number of warnings
             else:
                 if log_channel is not None:
-                    await log_channel.send(embed=get_log_max_warnings_embed(ctx, member))
+                    await log_channel.send(embed=max_log_warnings_embed(ctx, member))
 
                 # send the message to the user
-                await member.send(embed=get_max_warnings_embed(ctx, member))
+                await member.send(embed=max_warnings_embed(ctx, member))
 
                 # remove the user from the warned list, because we are going to kick it
                 Saves.rm_warned_user(member.id)
@@ -426,7 +427,7 @@ class Moderation(commands.Cog):
                       f' nel file di configurazione')
                 return
 
-            return await fail_channel.send(embed=get_fail_word_embed(ctx, member, reason))
+            return await fail_channel.send(embed=fail_word_embed(ctx, member, reason))
 
     # remove a warning from a user
     @has_guild_permissions(kick_members=True)
@@ -446,7 +447,7 @@ class Moderation(commands.Cog):
                         f' nel file di configurazione')
                     return
 
-                return await fail_log_channel.send(embed=get_cant_remove_warning_embed(ctx, member))
+                return await fail_log_channel.send(embed=cant_remove_warning_embed(ctx, member))
 
             # successfully removed the warning from the user
             case 0:
@@ -456,8 +457,18 @@ class Moderation(commands.Cog):
                           f" corretto nel file di configurazione")
                     return
 
-                return await spam_channel.send(embed=get_rm_warning_embed(ctx, member))
+                return await spam_channel.send(embed=rm_warning_embed(ctx, member))
                 pass
+
+    # get the warned users list
+    @has_guild_permissions(kick_members=True)
+    @commands.command()
+    @commands.cooldown(1, 2, commands.BucketType.user)
+    async def warned_users(self, ctx):
+        if not is_moderation_channel(ctx.channel.id):
+            return
+
+        return await ctx.channel.send(embed=warned_users_embed(ctx))
 
 
 def setup(bot):

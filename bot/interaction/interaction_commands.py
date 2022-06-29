@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 
 from utils.utils import Colors
@@ -165,7 +164,7 @@ class Interaction(commands.Cog):
             return
 
         if member is None:
-            return await ctx.channel.send(embed=get_warn_number(str(ctx.author), ctx.author.id,ctx.author.avatar_url))
+            return await ctx.channel.send(embed=get_warn_number(str(ctx.author), ctx.author.id, ctx.author.avatar_url))
 
         return await ctx.channel.send(embed=get_warn_number(str(member), member.id, member.avatar_url))
 
