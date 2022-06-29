@@ -99,4 +99,7 @@ descrizione</p><br>
 #### <p align="center"> 🦄 [ ModerationChannles ] L'id del canale / canali dove possono essere eseguiti i comandi di moderazione</p>
 #### <p align="center"> 🦓 [ InteractionChannels ] L'id del canale / canali dove possono essere eseguiti i comandi di interazione</p>
 #### <p align="center"> 🦄 [ MuteRole ] L'id del ruolo che verrà attribbuito all'utente quando viene eseguito il comando "mute", assicurarsi che con il ruolo dato l'utente non possa scrivere</p>
-#### <p align="center"> 🦓 [ KickAfterWarns ] Il numero massimo di warnings che un utente può raggiungere prima che venga sanzionato</p>
+#### <p align="center"> 🦓 [ KickAfterWarns ] Il numero massimo di warnings che un utente può raggiungere prima che venga sanzionato</p><br>
+
+# <p align="center">💘 Grazie Per Essere Passato 💘</p>
+<p align="center"> <img src="https://pa1.narvii.com/6284/0104df163f7f203a1e709cda7efc9771d9b48e00_hq.gif" width="500px" height="282px"></p>
