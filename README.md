@@ -5,7 +5,7 @@
 <img src="https://i.ytimg.com/vi/Ux5cQbO_ybw/maxresdefault.jpg" width="1800px" height="525px">
 
 # <p align="center">🐸 Requirements 🐸</p>
-#### <p align="center">-> 🐍 Python 🐍 <- </p>
+#### <p align="center">-> 🐍 Python 3.10 🐍 <- </p>
 #### <p align="center">-> 🤖 Discord.py  module 🤖 <- </p>
 #### <p align="center">-> ✂️ Discord ✂️ <- </p>
 #### <p align="center">-> 🔗 Discord Developer Mode 🔗 <- </p><br>
@@ -36,7 +36,12 @@
 #### <p align="center"> 💢 [ blackwords ] Manda nei messaggi DM la lista delle parole bandite dal server all'utente che ha eseguito il comando</p>
 #### <p align="center"> 💥 [ citations ] Manda nei messaggi DM la lista delle citazioni del bot all'utente che ha eseguito il comando</p>
 #### <p align="center"> 💢 [ citation ] Il bot annuncia una citazione in modo randomico nel canale in cui il comando è stato eseguito</p>
-#### <p align="center"> 💥 [ help ] Manda la lista dei comandi con le loro descrizioni, oppure se accompagnato dal nome di un comando, manda la sua descrizione</p><br>
+#### <p align="center"> 💥 [ help ] Manda la lista dei comandi con le loro descrizioni, oppure se accompagnato dal nome di un comando, manda la sua 
+descrizione</p><br>
+#### <p align="center"> 💢 [ random ] Genera un numero casuale tra i due numeri che gli vengono passati</p>
+#### <p align="center"> 💥 [ hot ] abbreviazione di "Head Or Tatils" simula il gioco testa o croce</p>
+#### <p align="center"> 💢 [ pic ] Manda la pic di un utente taggato nel canale in cui il comando è stato fatto</p>
+#### <p align="center"> 💥 [ warnof ] Manda il numero di warn di uno specifico utente taggato</p>
 
 ## <p align="center">🏐 Comandi Di Moderazione 🏐</p>
 #### <p align="center"> 💥 [ kick ] Espelle un utente dal server ( tramite Id oppure @menzione )</p>
@@ -50,9 +55,9 @@
 #### <p align="center"> 💥 [ mute ] Muta ( testualmente ) un utente per un certo periodo di tempo dato ( s / m / h / d )</p>
 #### <p align="center"> 💢 [ unmute ] Smuta ( testualmente ) un utente ( tramite Id oppure @menzione) </p>
 #### <p align="center"> 💥 [ unban ] Sbanna un utente ( tramite nome#1234 )</p>
-#### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p><br>
-#### <p align="center"> 💥 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p><br>
-
+#### <p align="center"> 💢 [ banlist ] Manda la lista completa degli utenti bannati nel canale in cui il comando è stato evocato</p>
+#### <p align="center"> 💥 [ warn ] Avvisa un utente per un suo comportamento, dopo un tot numeri di worn l'utente verrà sanzionato</p>
+#### <p align="center"> 💢 [ warned_users ] Manda la lista degli utenti warnati nel server, nel canale in cui il comando è stato evocato</p><br>
 
 # <p align="center">🚨 Permessi Comandi 🚨</p>
 #### <p align="center"> 🔖 [ hello ]  - - -  [ Nessuno ]</p>
@@ -74,8 +79,14 @@
 #### <p align="center"> 🔖 [ unmute ] - - -  [ Mutare Utenti ]</p>
 #### <p align="center"> 🏷️ [ unban ] - - -  [ Bannare Utenti ]</p>
 #### <p align="center"> 🔖 [ banlist ] - - -  [ Bannare Utenti ]</p>
-#### <p align="center"> 🏷️ [ help ] - - -  [ Nessuno ]</p><br>
- 
+#### <p align="center"> 🏷️ [ help ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🔖 [ warn ] - - -  [ Espellere Utenti ]</p>
+#### <p align="center"> 🏷️ [ warned_users ] - - -  [ Espellere Utenti ]</p>
+#### <p align="center"> 🔖 [ random ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ hot ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🔖 [ pic ] - - -  [ Nessuno ]</p>
+#### <p align="center"> 🏷️ [ warnof ] - - -  [ Nessuno ]</p><br>
+
 # <p align="center">💾 File Configurazione 💾</p>
 #### <p align="center"> 🦄 [ Token ] Il proprio token personale da inserire, indispensabile per il funzionamento del bot</p>
 #### <p align="center"> 🦓 [ Prefix ] Il prefisso che precederà qualsiasi comando</p>
@@ -88,3 +99,7 @@
 #### <p align="center"> 🦄 [ ModerationChannles ] L'id del canale / canali dove possono essere eseguiti i comandi di moderazione</p>
 #### <p align="center"> 🦓 [ InteractionChannels ] L'id del canale / canali dove possono essere eseguiti i comandi di interazione</p>
 #### <p align="center"> 🦄 [ MuteRole ] L'id del ruolo che verrà attribbuito all'utente quando viene eseguito il comando "mute", assicurarsi che con il ruolo dato l'utente non possa scrivere</p>
+#### <p align="center"> 🦓 [ KickAfterWarns ] Il numero massimo di warnings che un utente può raggiungere prima che venga sanzionato</p><br>
+
+# <p align="center">💘 Grazie Per Essere Passato 💘</p>
+<p align="center"> <img src="https://pa1.narvii.com/6284/0104df163f7f203a1e709cda7efc9771d9b48e00_hq.gif" width="500px" height="282px"></p>
